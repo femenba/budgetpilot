@@ -4,6 +4,7 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute'
 import Login        from './pages/Login'
 import Register     from './pages/Register'
 import Dashboard    from './pages/Dashboard'
+import AuthCallback from './pages/AuthCallback'
 import AddIncome    from './pages/AddIncome'
 import AddExpense   from './pages/AddExpense'
 import Transactions from './pages/Transactions'
@@ -16,6 +17,7 @@ export default function App() {
           {/* Auth */}
           <Route path="/login"    element={<Login />}    />
           <Route path="/register" element={<Register />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
 
           {/* Legacy redirect */}
           <Route path="/auth" element={<Navigate to="/login" replace />} />
