@@ -1,7 +1,8 @@
 import { TrendingUp, TrendingDown, Wallet } from 'lucide-react'
+import { useCurrency } from '../../hooks/useCurrency'
 
 function Card({ label, amount, icon: Icon, colorClass, bgClass }) {
-  const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+  const { fmt } = useCurrency()
   return (
     <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
       <div className={`p-3 rounded-xl ${bgClass}`}>

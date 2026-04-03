@@ -71,9 +71,28 @@ function MobileNavItem({ to, end, icon: Icon, label, accent }) {
   )
 }
 
+const CURRENCIES = [
+  { code: 'USD', label: 'USD – US Dollar'        },
+  { code: 'GBP', label: 'GBP – British Pound'    },
+  { code: 'EUR', label: 'EUR – Euro'              },
+  { code: 'CAD', label: 'CAD – Canadian Dollar'  },
+  { code: 'AUD', label: 'AUD – Australian Dollar'},
+  { code: 'JPY', label: 'JPY – Japanese Yen'     },
+  { code: 'CHF', label: 'CHF – Swiss Franc'      },
+  { code: 'INR', label: 'INR – Indian Rupee'     },
+  { code: 'CNY', label: 'CNY – Chinese Yuan'     },
+  { code: 'MXN', label: 'MXN – Mexican Peso'     },
+  { code: 'BRL', label: 'BRL – Brazilian Real'   },
+  { code: 'SGD', label: 'SGD – Singapore Dollar' },
+]
+
 export function Layout({ children }) {
-  const { user, signOut } = useAuth()
+  const { user, profile, signOut, updateProfile } = useAuth()
   const navigate = useNavigate()
+
+  const handleCurrencyChange = async (e) => {
+    await updateProfile({ currency: e.target.value })
+  }
 
   const handleSignOut = async () => {
     await signOut()
@@ -110,6 +129,15 @@ export function Layout({ children }) {
               <p className="text-[10px] text-gray-400">Free plan</p>
             </div>
           </div>
+          <select
+            value={profile?.currency ?? 'USD'}
+            onChange={handleCurrencyChange}
+            className="w-full px-3 py-2 rounded-xl border border-gray-100 bg-gray-50 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition mb-1"
+          >
+            {CURRENCIES.map(c => (
+              <option key={c.code} value={c.code}>{c.label}</option>
+            ))}
+          </select>
           <button
             onClick={handleSignOut}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 transition-all"

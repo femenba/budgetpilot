@@ -4,11 +4,10 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { useBalanceTrend } from '../../hooks/useBalanceTrend'
-
-const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
-const fmtFull = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+import { useCurrency } from '../../hooks/useCurrency'
 
 function CustomTooltip({ active, payload, label }) {
+  const { fmt: fmtFull } = useCurrency()
   if (!active || !payload?.length) return null
   const income  = payload.find(p => p.dataKey === 'income')
   const expense = payload.find(p => p.dataKey === 'expense')
@@ -61,6 +60,7 @@ function Skeleton() {
 }
 
 export function BalanceTrendChart() {
+  const { fmtShort: fmt } = useCurrency()
   const { data, loading, error } = useBalanceTrend(6)
 
   const hasData = data.some(d => d.income > 0 || d.expense > 0)

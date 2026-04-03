@@ -3,6 +3,7 @@ import {
   CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
 import { format, parseISO, getDate } from 'date-fns'
+import { useCurrency } from '../../hooks/useCurrency'
 
 function buildWeeklyData(transactions) {
   const weeks = [
@@ -19,9 +20,8 @@ function buildWeeklyData(transactions) {
   return weeks.map(w => ({ ...w, balance: w.income - w.expense }))
 }
 
-const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
-
 function CustomTooltip({ active, payload, label }) {
+  const { fmt } = useCurrency()
   if (!active || !payload?.length) return null
   const get = key => payload.find(p => p.dataKey === key)?.value ?? 0
 
@@ -47,6 +47,7 @@ function CustomTooltip({ active, payload, label }) {
 }
 
 export function MonthlyChart({ transactions }) {
+  const { symbol } = useCurrency()
   const data = buildWeeklyData(transactions)
   const hasData = transactions.length > 0
 
@@ -83,7 +84,7 @@ export function MonthlyChart({ transactions }) {
               tick={{ fontSize: 11, fill: '#9ca3af' }}
               axisLine={false}
               tickLine={false}
-              tickFormatter={v => `$${v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}`}
+              tickFormatter={v => `${symbol}${v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}`}
               width={44}
             />
             <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f9fafb' }} />

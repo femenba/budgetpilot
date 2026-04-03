@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
-
-const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+import { useCurrency } from '../../hooks/useCurrency'
 
 function buildData(transactions, type) {
   const map = {}
@@ -15,6 +14,7 @@ function buildData(transactions, type) {
 }
 
 function CustomTooltip({ active, payload }) {
+  const { fmt } = useCurrency()
   if (!active || !payload?.length) return null
   const { name, value, color } = payload[0].payload
   return (
@@ -30,14 +30,11 @@ function CustomTooltip({ active, payload }) {
 
 /** Renders the total amount in the centre of the donut */
 function CenterLabel({ cx, cy, total, type }) {
-  const fmtShort = new Intl.NumberFormat('en-US', {
-    style: 'currency', currency: 'USD',
-    notation: 'compact', maximumFractionDigits: 1,
-  })
+  const { fmtCompact } = useCurrency()
   return (
     <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
       <tspan x={cx} dy="-6" fontSize="15" fontWeight="700" fill="#111827">
-        {fmtShort.format(total)}
+        {fmtCompact.format(total)}
       </tspan>
       <tspan x={cx} dy="18" fontSize="10" fill="#9ca3af">
         total {type}
@@ -48,6 +45,7 @@ function CenterLabel({ cx, cy, total, type }) {
 
 export function CategoryBreakdown({ transactions }) {
   const [activeType, setActiveType] = useState('expense')
+  const { fmt } = useCurrency()
 
   const data  = buildData(transactions, activeType)
   const total = data.reduce((s, d) => s + d.value, 0)

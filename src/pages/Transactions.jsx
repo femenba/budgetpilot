@@ -7,6 +7,7 @@ import {
 import { format, parseISO } from 'date-fns'
 import { useTransactions } from '../hooks/useTransactions'
 import { useCategories } from '../hooks/useCategories'
+import { useCurrency } from '../hooks/useCurrency'
 import { Layout } from '../components/layout/Layout'
 import { TransactionRow } from '../components/transactions/TransactionRow'
 import { EditTransactionModal } from '../components/transactions/EditTransactionModal'
@@ -69,7 +70,7 @@ export default function Transactions() {
 
   const { categories } = useCategories()
 
-  const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+  const { fmt } = useCurrency()
 
   const filtered = useMemo(() => {
     return transactions.filter(t => {

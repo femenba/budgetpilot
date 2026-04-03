@@ -3,10 +3,12 @@ import { RotateCcw } from 'lucide-react'
 import { Modal } from '../ui/Modal'
 import { Button } from '../ui/Button'
 import { useCategories } from '../../hooks/useCategories'
+import { useCurrency } from '../../hooks/useCurrency'
 
 export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
   const isIncome = transaction?.type === 'income'
   const { categories } = useCategories(transaction?.type)
+  const { symbol } = useCurrency()
 
   const [amount,      setAmount]      = useState('')
   const [categoryId,  setCategoryId]  = useState('')
@@ -71,7 +73,7 @@ export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-gray-700">Amount</label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-sm">$</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-sm">{symbol}</span>
             <input
               type="number"
               step="0.01"

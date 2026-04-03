@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { format, parseISO } from 'date-fns'
 import { Pencil, Trash2, Check, X } from 'lucide-react'
+import { useCurrency } from '../../hooks/useCurrency'
 
 export function TransactionRow({ transaction: t, onDelete, onEdit }) {
   const [confirming, setConfirming] = useState(false)
   const [deleting,   setDeleting]   = useState(false)
 
-  const fmt      = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+  const { fmt } = useCurrency()
   const isIncome = t.type === 'income'
   const letter   = (t.category?.name ?? t.type).charAt(0).toUpperCase()
 

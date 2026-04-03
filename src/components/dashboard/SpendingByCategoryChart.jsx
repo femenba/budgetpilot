@@ -3,9 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Cell,
   Tooltip, ResponsiveContainer, LabelList,
 } from 'recharts'
-
-const fmt     = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
-const fmtShort = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
+import { useCurrency } from '../../hooks/useCurrency'
 
 function buildData(transactions, type) {
   const map = {}
@@ -23,6 +21,7 @@ function buildData(transactions, type) {
 }
 
 function CustomTooltip({ active, payload }) {
+  const { fmt } = useCurrency()
   if (!active || !payload?.length) return null
   const { name, amount, color } = payload[0].payload
   return (
@@ -37,6 +36,7 @@ function CustomTooltip({ active, payload }) {
 }
 
 function CustomLabel({ x, y, width, height, value, viewBox }) {
+  const { fmtShort } = useCurrency()
   if (!value) return null
   return (
     <text
@@ -52,6 +52,7 @@ function CustomLabel({ x, y, width, height, value, viewBox }) {
 
 export function SpendingByCategoryChart({ transactions }) {
   const [activeType, setActiveType] = useState('expense')
+  const { fmt } = useCurrency()
 
   const data  = useMemo(() => buildData(transactions, activeType), [transactions, activeType])
   const total = useMemo(() => data.reduce((s, d) => s + d.amount, 0), [data])

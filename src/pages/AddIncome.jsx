@@ -4,12 +4,14 @@ import { ArrowLeft, CheckCircle2, RotateCcw } from 'lucide-react'
 import { createIncome } from '../services/transactionService'
 import { useAuth } from '../contexts/AuthContext'
 import { useCategories } from '../hooks/useCategories'
+import { useCurrency } from '../hooks/useCurrency'
 import { Layout } from '../components/layout/Layout'
 
 export default function AddIncome() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { categories, loading: catLoading } = useCategories('income')
+  const { symbol, fmt } = useCurrency()
 
   const [amount,      setAmount]      = useState('')
   const [categoryId,  setCategoryId]  = useState('')
@@ -76,7 +78,7 @@ export default function AddIncome() {
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
               <label className="block text-sm font-semibold text-gray-700 mb-3">Amount</label>
               <div className="flex items-center gap-3">
-                <span className="text-3xl font-bold text-gray-300">$</span>
+                <span className="text-3xl font-bold text-gray-300">{symbol}</span>
                 <input
                   type="number"
                   step="0.01"
@@ -191,7 +193,7 @@ export default function AddIncome() {
                   {description && <span className="text-emerald-600 ml-1">· {description}</span>}
                 </div>
                 <span className="text-emerald-700 font-bold text-sm">
-                  +${parseFloat(amount).toFixed(2)}
+                  +{fmt.format(parseFloat(amount))}
                 </span>
               </div>
             )}
