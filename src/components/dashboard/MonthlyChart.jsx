@@ -53,12 +53,12 @@ export function MonthlyChart({ transactions }) {
 
   return (
     <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-2">
         <div>
           <h3 className="text-base font-semibold text-gray-800">Weekly Breakdown</h3>
           <p className="text-xs text-gray-400 mt-0.5">Income vs. expenses this month</p>
         </div>
-        <div className="flex items-center gap-3 text-xs text-gray-400">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
           <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-emerald-400" />Income</span>
           <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-red-400" />Expenses</span>
           <span className="flex items-center gap-1.5"><span className="w-5 h-0.5 bg-brand-500" />Net</span>

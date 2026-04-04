@@ -72,7 +72,7 @@ export function BalanceTrendChart() {
           <h3 className="text-base font-semibold text-gray-800">Balance Trend</h3>
           <p className="text-xs text-gray-400 mt-0.5">Last 6 months</p>
         </div>
-        <div className="flex items-center gap-4 text-xs text-gray-400">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
           <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />Income</span>
           <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-red-400" />Expenses</span>
           <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 rounded-full bg-brand-500" />Balance</span>
@@ -115,7 +115,7 @@ export function BalanceTrendChart() {
               axisLine={false}
               tickLine={false}
               tickFormatter={v => fmt.format(v)}
-              width={60}
+              width={48}
             />
 
             <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#e5e7eb', strokeWidth: 1 }} />

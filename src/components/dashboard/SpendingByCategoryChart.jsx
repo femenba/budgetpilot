@@ -101,14 +101,14 @@ export function SpendingByCategoryChart({ transactions }) {
           <BarChart
             layout="vertical"
             data={data}
-            margin={{ top: 0, right: 70, left: 0, bottom: 0 }}
+            margin={{ top: 0, right: 56, left: 0, bottom: 0 }}
             barCategoryGap="20%"
           >
             <XAxis type="number" hide domain={[0, 'dataMax']} />
             <YAxis
               type="category"
               dataKey="name"
-              width={88}
+              width={76}
               tick={{ fontSize: 12, fill: '#4b5563' }}
               axisLine={false}
               tickLine={false}

@@ -198,7 +198,7 @@ export function Layout({ children }) {
       </aside>
 
       {/* ── Main Content ─────────────────────────────────────────── */}
-      <div className="flex-1 md:ml-60 flex flex-col min-h-screen">
+      <div className="flex-1 md:ml-60 flex flex-col min-h-screen overflow-x-hidden">
         {/* Mobile top bar */}
         <header className="md:hidden bg-white border-b border-gray-100 sticky top-0 z-10">
           <div className="h-14 flex items-center justify-between px-4">

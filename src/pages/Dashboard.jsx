@@ -101,10 +101,10 @@ export default function Dashboard() {
 
         {/* ── Monthly breakdown + category donut ───────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 min-w-0">
             <MonthlyChart transactions={transactions} />
           </div>
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 min-w-0">
             <CategoryBreakdown transactions={transactions} />
           </div>
         </div>
