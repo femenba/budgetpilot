@@ -2,16 +2,32 @@ import { useEffect, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, TrendingUp, TrendingDown,
-  ArrowLeftRight, LogOut,
+  ArrowLeftRight, LogOut, CreditCard,
+  BarChart2, FileText, Target,
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
 const INACTIVITY_MS = 10 * 60 * 1000 // 10 minutes
 const ACTIVITY_EVENTS = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click']
 
-const NAV = [
+const NAV_CORE = [
   { to: '/',             end: true, icon: LayoutDashboard, label: 'Dashboard'    },
   { to: '/transactions',            icon: ArrowLeftRight,  label: 'Transactions' },
+  { to: '/income/add',              icon: TrendingUp,      label: 'Add Income',  accent: 'emerald' },
+  { to: '/expense/add',             icon: TrendingDown,    label: 'Add Expense', accent: 'red'     },
+]
+
+const NAV_PRO = [
+  { to: '/insights', icon: BarChart2, label: 'Insights' },
+  { to: '/reports',  icon: FileText,  label: 'Reports'  },
+  { to: '/budgets',  icon: Target,    label: 'Budgets'  },
+]
+
+// Mobile bottom nav: fixed 5 items regardless of plan
+const NAV_MOBILE = [
+  { to: '/',             end: true, icon: LayoutDashboard, label: 'Dashboard'    },
+  { to: '/transactions',            icon: ArrowLeftRight,  label: 'Transactions' },
+  { to: '/plans',                   icon: CreditCard,      label: 'Plans'        },
   { to: '/income/add',              icon: TrendingUp,      label: 'Add Income',  accent: 'emerald' },
   { to: '/expense/add',             icon: TrendingDown,    label: 'Add Expense', accent: 'red'     },
 ]
@@ -159,7 +175,18 @@ export function Layout({ children }) {
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 flex flex-col gap-1 overflow-y-auto">
-          {NAV.map(item => <NavItem key={item.to} {...item} />)}
+          {NAV_CORE.map(item => <NavItem key={item.to} {...item} />)}
+
+          <hr className="my-2 border-gray-100" />
+
+          <NavItem to="/plans" icon={CreditCard} label="Plans" />
+
+          {isPro && (
+            <>
+              <p className="px-3 pt-3 pb-1 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Pro</p>
+              {NAV_PRO.map(item => <NavItem key={item.to} {...item} />)}
+            </>
+          )}
         </nav>
 
         {/* User */}
@@ -248,7 +275,7 @@ export function Layout({ children }) {
 
       {/* ── Mobile Bottom Nav ────────────────────────────────────── */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 z-20 flex">
-        {NAV.map(item => <MobileNavItem key={item.to} {...item} />)}
+        {NAV_MOBILE.map(item => <MobileNavItem key={item.to} {...item} />)}
       </nav>
     </div>
   )

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { ProtectedRoute } from './components/layout/ProtectedRoute'
+import { ProRoute } from './components/layout/ProRoute'
 import Login        from './pages/Login'
 import Register     from './pages/Register'
 import Dashboard    from './pages/Dashboard'
@@ -8,6 +9,10 @@ import AuthCallback from './pages/AuthCallback'
 import AddIncome    from './pages/AddIncome'
 import AddExpense   from './pages/AddExpense'
 import Transactions from './pages/Transactions'
+import Plans        from './pages/Plans'
+import Insights     from './pages/Insights'
+import Reports      from './pages/Reports'
+import Budgets      from './pages/Budgets'
 
 export default function App() {
   return (
@@ -35,6 +40,14 @@ export default function App() {
           <Route path="/transactions" element={
             <ProtectedRoute><Transactions /></ProtectedRoute>
           } />
+          <Route path="/plans" element={
+            <ProtectedRoute><Plans /></ProtectedRoute>
+          } />
+
+          {/* Pro-only routes — show upgrade gate for Free users */}
+          <Route path="/insights" element={<ProRoute><Insights /></ProRoute>} />
+          <Route path="/reports"  element={<ProRoute><Reports /></ProRoute>}  />
+          <Route path="/budgets"  element={<ProRoute><Budgets /></ProRoute>}  />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
