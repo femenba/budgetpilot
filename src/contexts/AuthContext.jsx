@@ -9,14 +9,19 @@ export function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const initializedRef = useRef(false)
+  // Monotonic counter — each loadProfile call captures a token; only the
+  // most-recent call is allowed to commit its result, preventing races between
+  // INITIAL_SESSION, TOKEN_REFRESHED, and visibility/pageshow handlers.
+  const profileSeqRef = useRef(0)
 
   const loadProfile = async (userId) => {
     if (!userId) { setProfile(null); return }
+    const seq = ++profileSeqRef.current
     try {
       const { data } = await fetchProfile(userId)
-      setProfile(data ?? null)
+      if (seq === profileSeqRef.current) setProfile(data ?? null)
     } catch {
-      setProfile(null)
+      if (seq === profileSeqRef.current) setProfile(null)
     }
   }
 
@@ -50,22 +55,42 @@ export function AuthProvider({ children }) {
       }
     })
 
-    // When the tab wakes from idle the browser may have throttled Supabase's
-    // internal refresh timer, leaving the client with a stale/expired token.
-    // Calling getSession() on visibility forces an immediate re-check and
-    // triggers TOKEN_REFRESHED or SIGNED_OUT via the listener above — keeping
-    // the UI in sync and preventing the freeze-on-wake symptom.
-    const handleVisibility = () => {
-      if (document.visibilityState === 'visible') {
-        supabase.auth.getSession()
+    // When the tab wakes from idle, force a fresh session check AND re-fetch
+    // the profile directly. On Mobile Safari a still-valid token won't trigger
+    // TOKEN_REFRESHED, so without the explicit loadProfile call the UI keeps
+    // showing stale profile data (wrong plan, missing fields).
+    const handleVisibility = async () => {
+      if (document.visibilityState !== 'visible') return
+      const { data: { session } } = await supabase.auth.getSession()
+      const u = session?.user ?? null
+      if (u) {
+        await loadProfile(u.id)
       }
     }
+
+    // Mobile Safari restores pages from bfcache (back-forward cache) without
+    // re-running the auth listener. The `pageshow` event with e.persisted===true
+    // is the only reliable signal for this case.
+    const handlePageShow = async (e) => {
+      if (!e.persisted) return
+      const { data: { session } } = await supabase.auth.getSession()
+      const u = session?.user ?? null
+      setUser(u)
+      if (u) {
+        await loadProfile(u.id)
+      } else {
+        setProfile(null)
+      }
+    }
+
     document.addEventListener('visibilitychange', handleVisibility)
+    window.addEventListener('pageshow', handlePageShow)
 
     return () => {
       subscription.unsubscribe()
       clearTimeout(timeout)
       document.removeEventListener('visibilitychange', handleVisibility)
+      window.removeEventListener('pageshow', handlePageShow)
     }
   }, [])
 
