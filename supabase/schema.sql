@@ -21,12 +21,17 @@ create table if not exists public.profiles (
   full_name     text,
   avatar_url    text,
   currency      char(3)     not null default 'USD',   -- ISO 4217
+  plan          text        not null default 'free' check (plan in ('free', 'pro')),
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
 );
 
 comment on table  public.profiles             is 'Public profile data for each authenticated user.';
 comment on column public.profiles.currency    is 'Preferred display currency (ISO 4217).';
+comment on column public.profiles.plan        is 'Subscription plan: free (default) or pro.';
+
+-- Migration for existing databases (safe to re-run)
+alter table public.profiles add column if not exists plan text not null default 'free' check (plan in ('free', 'pro'));
 
 -- Auto-create a profile row when a new user signs up
 create or replace function public.handle_new_user()

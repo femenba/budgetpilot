@@ -1,9 +1,13 @@
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, TrendingUp, TrendingDown,
-  ArrowLeftRight, LogOut, User,
+  ArrowLeftRight, LogOut,
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
+
+const INACTIVITY_MS = 10 * 60 * 1000 // 10 minutes
+const ACTIVITY_EVENTS = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click']
 
 const NAV = [
   { to: '/',             end: true, icon: LayoutDashboard, label: 'Dashboard'    },
@@ -90,8 +94,48 @@ export function Layout({ children }) {
   const { user, profile, signOut, updateProfile } = useAuth()
   const navigate = useNavigate()
 
+  // Keep refs so the inactivity callback always uses the latest versions
+  // without causing the effect to re-run (and reset the timer) on re-renders.
+  const signOutRef = useRef(signOut)
+  const navigateRef = useRef(navigate)
+  signOutRef.current = signOut
+  navigateRef.current = navigate
+
+  useEffect(() => {
+    let timer
+
+    const reset = () => {
+      clearTimeout(timer)
+      timer = setTimeout(async () => {
+        await signOutRef.current()
+        navigateRef.current('/login', { replace: true })
+      }, INACTIVITY_MS)
+    }
+
+    reset()
+    ACTIVITY_EVENTS.forEach(e => window.addEventListener(e, reset, { passive: true }))
+
+    return () => {
+      clearTimeout(timer)
+      ACTIVITY_EVENTS.forEach(e => window.removeEventListener(e, reset))
+    }
+  }, []) // intentionally empty — refs keep callbacks current without restarting the timer
+
+  const [showUpgradeMsg, setShowUpgradeMsg] = useState(false)
+  const upgradeMsgTimer = useRef(null)
+
+  const isPro = profile?.plan === 'pro'
+
   const handleCurrencyChange = async (e) => {
-    await updateProfile({ currency: e.target.value })
+    const next = e.target.value
+    if (!isPro && next !== (profile?.currency ?? 'USD')) {
+      setShowUpgradeMsg(true)
+      clearTimeout(upgradeMsgTimer.current)
+      upgradeMsgTimer.current = setTimeout(() => setShowUpgradeMsg(false), 3500)
+      return
+    }
+    setShowUpgradeMsg(false)
+    await updateProfile({ currency: next })
   }
 
   const handleSignOut = async () => {
@@ -104,7 +148,7 @@ export function Layout({ children }) {
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* ── Desktop Sidebar ─────────────────────────────────────── */}
-      <aside className="hidden lg:flex flex-col w-60 bg-white border-r border-gray-100 fixed inset-y-0 left-0 z-20">
+      <aside className="hidden md:flex flex-col w-60 bg-white border-r border-gray-100 fixed inset-y-0 left-0 z-20">
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-5 h-16 border-b border-gray-100 shrink-0">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-sm">
@@ -126,7 +170,7 @@ export function Layout({ children }) {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-gray-800 truncate">{user?.email}</p>
-              <p className="text-[10px] text-gray-400">Free plan</p>
+              <p className="text-[10px] text-gray-400">{isPro ? 'Pro plan' : 'Free plan'}</p>
             </div>
           </div>
           <select
@@ -138,6 +182,11 @@ export function Layout({ children }) {
               <option key={c.code} value={c.code}>{c.label}</option>
             ))}
           </select>
+          {showUpgradeMsg && (
+            <p className="text-[10px] text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-1.5 mb-1 leading-snug">
+              Upgrade to Pro to use multiple currencies
+            </p>
+          )}
           <button
             onClick={handleSignOut}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 transition-all"
@@ -149,31 +198,53 @@ export function Layout({ children }) {
       </aside>
 
       {/* ── Main Content ─────────────────────────────────────────── */}
-      <div className="flex-1 lg:ml-60 flex flex-col min-h-screen">
+      <div className="flex-1 md:ml-60 flex flex-col min-h-screen">
         {/* Mobile top bar */}
-        <header className="lg:hidden bg-white border-b border-gray-100 h-14 flex items-center justify-between px-4 sticky top-0 z-10">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
-              <span className="text-white font-bold text-xs">B</span>
+        <header className="md:hidden bg-white border-b border-gray-100 sticky top-0 z-10">
+          <div className="h-14 flex items-center justify-between px-4">
+            <div className="flex items-center gap-2 min-w-0 overflow-hidden">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shrink-0">
+                <span className="text-white font-bold text-xs">B</span>
+              </div>
+              <span className="font-bold text-gray-900 truncate">BudgetPilot</span>
             </div>
-            <span className="font-bold text-gray-900">BudgetPilot</span>
+            <div className="flex items-center gap-2 shrink-0 ml-2">
+              <select
+                value={profile?.currency ?? 'USD'}
+                onChange={handleCurrencyChange}
+                aria-label="Currency"
+                className="text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition"
+              >
+                {CURRENCIES.map(c => (
+                  <option key={c.code} value={c.code}>{c.code}</option>
+                ))}
+              </select>
+              <button
+                onClick={handleSignOut}
+                aria-label="Sign out"
+                className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+              >
+                <LogOut size={16} />
+              </button>
+            </div>
           </div>
-          <button
-            onClick={handleSignOut}
-            className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-          >
-            <LogOut size={16} />
-          </button>
+          {showUpgradeMsg && (
+            <div className="px-4 pb-2">
+              <p className="text-[11px] text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 leading-snug">
+                Upgrade to Pro to use multiple currencies
+              </p>
+            </div>
+          )}
         </header>
 
         {/* Page content */}
-        <main className="flex-1 pb-20 lg:pb-0">
+        <main className="flex-1 pb-20 md:pb-0">
           {children}
         </main>
       </div>
 
       {/* ── Mobile Bottom Nav ────────────────────────────────────── */}
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 z-20 flex">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 z-20 flex">
         {NAV.map(item => <MobileNavItem key={item.to} {...item} />)}
       </nav>
     </div>

@@ -50,7 +50,23 @@ export function AuthProvider({ children }) {
       }
     })
 
-    return () => { subscription.unsubscribe(); clearTimeout(timeout) }
+    // When the tab wakes from idle the browser may have throttled Supabase's
+    // internal refresh timer, leaving the client with a stale/expired token.
+    // Calling getSession() on visibility forces an immediate re-check and
+    // triggers TOKEN_REFRESHED or SIGNED_OUT via the listener above — keeping
+    // the UI in sync and preventing the freeze-on-wake symptom.
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        supabase.auth.getSession()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+
+    return () => {
+      subscription.unsubscribe()
+      clearTimeout(timeout)
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
   }, [])
 
   // ── Auth actions ────────────────────────────────────────────
