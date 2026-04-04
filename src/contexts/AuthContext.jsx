@@ -11,34 +11,50 @@ export function AuthProvider({ children }) {
 
   const loadProfile = async (userId) => {
     if (!userId) { setProfile(null); return }
-    const { data } = await fetchProfile(userId)
-    setProfile(data ?? null)
+    try {
+      const { data } = await fetchProfile(userId)
+      setProfile(data ?? null)
+    } catch {
+      setProfile(null)
+    }
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      const u = session?.user ?? null
-      setUser(u)
-      if (u) {
-        await upsertProfile(u)
-        await loadProfile(u.id)
+    // Safety valve: never let the app spin forever
+    const timeout = setTimeout(() => setLoading(false), 5000)
+
+    const init = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        const u = session?.user ?? null
+        setUser(u)
+        if (u) {
+          try { await upsertProfile(u) } catch { /* non-fatal */ }
+          await loadProfile(u.id)
+        }
+      } catch {
+        // session fetch failed — fall through to setLoading(false)
+      } finally {
+        clearTimeout(timeout)
+        setLoading(false)
       }
-      setLoading(false)
-    })
+    }
+
+    init()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       const u = session?.user ?? null
       setUser(u)
 
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        await upsertProfile(u)
+        try { await upsertProfile(u) } catch { /* non-fatal */ }
         await loadProfile(u?.id)
       }
       if (event === 'SIGNED_OUT')   setProfile(null)
       if (event === 'USER_UPDATED') await loadProfile(u?.id)
     })
 
-    return () => subscription.unsubscribe()
+    return () => { subscription.unsubscribe(); clearTimeout(timeout) }
   }, [])
 
   // ── Auth actions ────────────────────────────────────────────
