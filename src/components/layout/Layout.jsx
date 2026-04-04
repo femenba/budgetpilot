@@ -60,7 +60,7 @@ function MobileNavItem({ to, end, icon: Icon, label, accent }) {
       to={to}
       end={end}
       className={({ isActive }) =>
-        `flex flex-col items-center gap-1 px-3 py-2 text-[10px] font-medium transition-colors ${
+        `flex-1 flex flex-col items-center justify-center gap-1 py-2 text-[10px] font-medium transition-colors ${
           isActive ? accentColor : 'text-gray-400 hover:text-gray-600'
         }`
       }
@@ -206,7 +206,10 @@ export function Layout({ children }) {
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shrink-0">
                 <span className="text-white font-bold text-xs">B</span>
               </div>
-              <span className="font-bold text-gray-900 truncate">BudgetPilot</span>
+              <div className="flex flex-col min-w-0">
+                <span className="font-bold text-gray-900 text-sm leading-tight truncate">BudgetPilot</span>
+                <span className="text-[9px] leading-tight text-gray-400">{isPro ? 'Pro plan' : 'Free plan'}</span>
+              </div>
             </div>
             <div className="flex items-center gap-2 shrink-0 ml-2">
               <select

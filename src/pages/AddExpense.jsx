@@ -1,16 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2, RotateCcw } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, RotateCcw, Plus, X } from 'lucide-react'
 import { createExpense } from '../services/transactionService'
+import { createCategory } from '../services/categoryService'
 import { useAuth } from '../contexts/AuthContext'
 import { useCategories } from '../hooks/useCategories'
 import { useCurrency } from '../hooks/useCurrency'
 import { Layout } from '../components/layout/Layout'
 
+const CAT_COLORS = [
+  '#ef4444', '#f97316', '#eab308', '#22c55e',
+  '#3b82f6', '#8b5cf6', '#ec4899', '#6b7280',
+]
+
 export default function AddExpense() {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { categories, loading: catLoading } = useCategories('expense')
+  const { categories: fetchedCategories, loading: catLoading } = useCategories('expense')
   const { symbol, fmt } = useCurrency()
 
   const [amount,      setAmount]      = useState('')
@@ -21,6 +27,32 @@ export default function AddExpense() {
   const [error,       setError]       = useState('')
   const [saving,      setSaving]      = useState(false)
   const [saved,       setSaved]       = useState(false)
+
+  // Local category list — seeded from hook, extended by custom additions
+  const [categories,    setCategories]    = useState([])
+  const [showNewCat,    setShowNewCat]    = useState(false)
+  const [newCatName,    setNewCatName]    = useState('')
+  const [newCatColor,   setNewCatColor]   = useState(CAT_COLORS[0])
+  const [newCatSaving,  setNewCatSaving]  = useState(false)
+
+  useEffect(() => { setCategories(fetchedCategories) }, [fetchedCategories])
+
+  const handleCreateCategory = async () => {
+    const name = newCatName.trim()
+    if (!name) return
+    setNewCatSaving(true)
+    const { data, error: catErr } = await createCategory(user.id, {
+      name, type: 'expense', color: newCatColor,
+    })
+    setNewCatSaving(false)
+    if (catErr) { setError(catErr.message); return }
+    const created = data ?? { id: String(Date.now()), name, color: newCatColor, type: 'expense' }
+    setCategories(prev => [...prev, created])
+    setCategoryId(created.id)
+    setShowNewCat(false)
+    setNewCatName('')
+    setNewCatColor(CAT_COLORS[0])
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -104,32 +136,91 @@ export default function AddExpense() {
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-wrap gap-2">
-                  {categories.map(cat => {
-                    const active = categoryId === cat.id
-                    return (
+                <>
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map(cat => {
+                      const active = categoryId === cat.id
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => setCategoryId(active ? '' : cat.id)}
+                          className={`
+                            flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium border-2 transition-all
+                            ${active
+                              ? 'text-white border-transparent shadow-sm scale-105'
+                              : 'border-gray-100 bg-gray-50 text-gray-600 hover:border-gray-200 hover:bg-gray-100'
+                            }
+                          `}
+                          style={active ? { backgroundColor: cat.color, borderColor: cat.color } : {}}
+                        >
+                          <span
+                            className="w-2 h-2 rounded-full shrink-0"
+                            style={{ backgroundColor: active ? 'white' : cat.color }}
+                          />
+                          {cat.name}
+                        </button>
+                      )
+                    })}
+                    {!showNewCat && (
                       <button
-                        key={cat.id}
                         type="button"
-                        onClick={() => setCategoryId(active ? '' : cat.id)}
-                        className={`
-                          flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium border-2 transition-all
-                          ${active
-                            ? 'text-white border-transparent shadow-sm scale-105'
-                            : 'border-gray-100 bg-gray-50 text-gray-600 hover:border-gray-200 hover:bg-gray-100'
-                          }
-                        `}
-                        style={active ? { backgroundColor: cat.color, borderColor: cat.color } : {}}
+                        onClick={() => setShowNewCat(true)}
+                        className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium border-2 border-dashed border-gray-200 text-gray-400 hover:border-red-300 hover:text-red-500 transition-all"
                       >
-                        <span
-                          className="w-2 h-2 rounded-full shrink-0"
-                          style={{ backgroundColor: active ? 'white' : cat.color }}
-                        />
-                        {cat.name}
+                        <Plus size={14} />
+                        New
                       </button>
-                    )
-                  })}
-                </div>
+                    )}
+                  </div>
+
+                  {/* Inline new-category form */}
+                  {showNewCat && (
+                    <div className="mt-3 p-3 rounded-xl border border-gray-200 bg-gray-50 flex flex-col gap-3">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={newCatName}
+                          onChange={e => setNewCatName(e.target.value)}
+                          onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleCreateCategory())}
+                          placeholder="Category name"
+                          maxLength={40}
+                          autoFocus
+                          className="flex-1 px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent placeholder:text-gray-300 transition"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => { setShowNewCat(false); setNewCatName(''); setNewCatColor(CAT_COLORS[0]) }}
+                          className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500 shrink-0">Color:</span>
+                        <div className="flex gap-1.5 flex-wrap">
+                          {CAT_COLORS.map(c => (
+                            <button
+                              key={c}
+                              type="button"
+                              onClick={() => setNewCatColor(c)}
+                              className={`w-6 h-6 rounded-full transition-transform ${newCatColor === c ? 'scale-125 ring-2 ring-offset-1 ring-gray-400' : 'hover:scale-110'}`}
+                              style={{ backgroundColor: c }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleCreateCategory}
+                        disabled={!newCatName.trim() || newCatSaving}
+                        className="self-start px-4 py-1.5 rounded-lg bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-semibold transition-colors"
+                      >
+                        {newCatSaving ? 'Saving…' : 'Add category'}
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
 

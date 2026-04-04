@@ -31,7 +31,7 @@ export async function createCategory(userId, payload) {
     color:      payload.color      ?? '#6b7280',
     icon:       payload.icon       ?? 'circle',
     is_default: false,
-  })
+  }).select().single()
 }
 
 /**
