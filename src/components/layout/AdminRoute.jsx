@@ -11,7 +11,7 @@ export function AdminRoute({ children }) {
   )
 
   if (!user) return <Navigate to="/login" replace />
-  if (!profile?.is_admin) return <Navigate to="/" replace />
+  if (profile?.role !== 'admin') return <Navigate to="/" replace />
 
   return children
 }

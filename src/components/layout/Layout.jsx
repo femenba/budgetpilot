@@ -267,7 +267,7 @@ export function Layout({ children }) {
   const upgradeMsgTimer = useRef(null)
 
   const isPro    = profile?.plan === 'pro'
-  const isAdmin  = profile?.is_admin === true
+  const isAdmin  = profile?.role === 'admin'
 
   const handleCurrencyChange = async (e) => {
     const next = e.target.value

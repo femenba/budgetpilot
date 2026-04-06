@@ -68,7 +68,7 @@ export async function updateLastSeen(userId) {
 export async function fetchAllProfiles() {
   return supabase
     .from('profiles')
-    .select('id, email, first_name, last_name, phone, plan, is_admin, last_seen_at, created_at')
+    .select('id, email, first_name, last_name, phone, plan, role, last_seen_at, created_at')
     .order('created_at', { ascending: false })
 }
 
