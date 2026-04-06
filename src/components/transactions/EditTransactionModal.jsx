@@ -18,7 +18,6 @@ export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
   const [error,       setError]       = useState('')
   const [saving,      setSaving]      = useState(false)
 
-  // Populate form when transaction changes
   useEffect(() => {
     if (!transaction) return
     setAmount(String(transaction.amount))
@@ -49,10 +48,10 @@ export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
     onClose()
   }
 
-  const accent = isIncome ? 'ring-emerald-400' : 'ring-red-400'
+  const focusRing = isIncome ? 'focus:ring-green-500' : 'focus:ring-accent-red'
   const badge  = isIncome
-    ? 'bg-emerald-100 text-emerald-700'
-    : 'bg-red-100 text-red-600'
+    ? 'bg-green-50 text-green-700'
+    : 'bg-red-50 text-accent-red'
 
   return (
     <Modal
@@ -71,9 +70,9 @@ export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
 
         {/* Amount */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-gray-700">Amount</label>
+          <label className="text-sm font-medium text-ink">Amount</label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-sm">{symbol}</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-dim font-medium text-sm">{symbol}</span>
             <input
               type="number"
               step="0.01"
@@ -82,14 +81,14 @@ export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
               onChange={e => setAmount(e.target.value)}
               required
               autoFocus
-              className={`w-full pl-7 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-sm font-semibold focus:outline-none focus:ring-2 ${accent} focus:border-transparent transition`}
+              className={`w-full pl-7 pr-4 py-3 rounded-xl border border-line bg-surface text-sm font-semibold focus:outline-none focus:ring-2 ${focusRing} focus:border-transparent transition`}
             />
           </div>
         </div>
 
         {/* Category */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-gray-700">Category</label>
+          <label className="text-sm font-medium text-ink">Category</label>
           <div className="flex flex-wrap gap-2">
             {categories.map(cat => {
               const active = categoryId === cat.id
@@ -99,8 +98,8 @@ export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
                   type="button"
                   onClick={() => setCategoryId(active ? '' : cat.id)}
                   className={`
-                    flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border-2 transition-all
-                    ${active ? 'text-white border-transparent scale-105 shadow-sm' : 'border-gray-100 bg-gray-50 text-gray-600 hover:border-gray-200'}
+                    flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border-2 transition-all
+                    ${active ? 'text-white border-transparent scale-105' : 'border-line bg-canvas text-dim hover:border-gray-300'}
                   `}
                   style={active ? { backgroundColor: cat.color } : {}}
                 >
@@ -114,8 +113,8 @@ export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
 
         {/* Description */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Description <span className="text-gray-400 font-normal">(optional)</span>
+          <label className="text-sm font-medium text-ink">
+            Description <span className="text-dim font-normal">(optional)</span>
           </label>
           <input
             type="text"
@@ -123,32 +122,32 @@ export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
             onChange={e => setDescription(e.target.value)}
             placeholder="What was this for?"
             maxLength={200}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent focus:bg-white placeholder:text-gray-300 transition"
+            className="w-full px-4 py-3 rounded-xl border border-line bg-canvas text-sm focus:outline-none focus:ring-2 focus:ring-ink focus:border-transparent focus:bg-surface placeholder:text-gray-400 transition"
           />
         </div>
 
         {/* Date */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-gray-700">Date</label>
+          <label className="text-sm font-medium text-ink">Date</label>
           <input
             type="date"
             value={date}
             onChange={e => setDate(e.target.value)}
             required
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent focus:bg-white transition"
+            className="w-full px-4 py-3 rounded-xl border border-line bg-canvas text-sm focus:outline-none focus:ring-2 focus:ring-ink focus:border-transparent focus:bg-surface transition"
           />
         </div>
 
         {/* Recurring */}
         <div className="flex items-center justify-between py-1 px-1">
           <div className="flex items-center gap-2.5">
-            <RotateCcw size={15} className="text-gray-400" />
-            <span className="text-sm font-medium text-gray-700">Recurring</span>
+            <RotateCcw size={15} className="text-dim" />
+            <span className="text-sm font-medium text-ink">Recurring</span>
           </div>
           <button
             type="button"
             onClick={() => setRecurring(v => !v)}
-            className={`relative w-11 h-6 rounded-full transition-colors ${recurring ? (isIncome ? 'bg-emerald-500' : 'bg-red-500') : 'bg-gray-200'}`}
+            className={`relative w-11 h-6 rounded-full transition-colors ${recurring ? (isIncome ? 'bg-green-500' : 'bg-accent-red') : 'bg-line'}`}
           >
             <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${recurring ? 'translate-x-5' : ''}`} />
           </button>
@@ -156,7 +155,7 @@ export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
 
         {/* Error */}
         {error && (
-          <div className="flex items-start gap-2 px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+          <div className="flex items-start gap-2 px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-sm text-accent-red">
             <span className="mt-0.5 shrink-0">⚠</span>
             <span>{error}</span>
           </div>
@@ -170,7 +169,7 @@ export function EditTransactionModal({ open, transaction, onClose, onUpdate }) {
           <Button
             type="submit"
             disabled={saving}
-            className={`flex-1 justify-center ${isIncome ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600'}`}
+            className={`flex-1 justify-center ${isIncome ? 'bg-green-600 hover:bg-green-700' : 'bg-accent-red hover:bg-red-600'}`}
           >
             {saving ? (
               <span className="flex items-center gap-2">

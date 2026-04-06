@@ -1,26 +1,23 @@
 import { TrendingUp, TrendingDown, Wallet } from 'lucide-react'
 import { useCurrency } from '../../hooks/useCurrency'
 
-function Card({ label, amount, icon: Icon, valueClass, iconBg, iconColor, accent }) {
+function Card({ label, amount, icon: Icon, valueClass, iconBg, iconColor, badge }) {
   const { fmt } = useCurrency()
   const isNegative = amount < 0
 
   return (
-    <div className={`bg-white rounded-2xl p-5 border shadow-card overflow-hidden relative ${accent}`}>
-      {/* Subtle top accent stripe */}
-      <div className={`absolute top-0 left-0 right-0 h-0.5 ${iconBg.replace('bg-', 'bg-').replace('-100', '-400').replace('-50', '-400')}`} />
-
-      <div className="flex items-start justify-between mb-3">
-        <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center shrink-0`}>
-          <Icon size={20} className={iconColor} strokeWidth={2} />
+    <div className="bg-surface rounded-2xl p-5 border border-line shadow-card overflow-hidden">
+      <div className="flex items-start justify-between mb-4">
+        <div className={`w-9 h-9 rounded-xl ${iconBg} flex items-center justify-center shrink-0`}>
+          <Icon size={17} className={iconColor} strokeWidth={2} />
         </div>
-        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full ${iconBg} ${iconColor} opacity-70`}>
-          {label === 'Total Income' ? 'IN' : label === 'Total Expenses' ? 'OUT' : 'NET'}
+        <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${iconBg} ${iconColor}`}>
+          {badge}
         </span>
       </div>
 
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">{label}</p>
-      <p className={`text-2xl font-black tracking-tight ${isNegative ? 'text-red-500' : valueClass}`}>
+      <p className="text-xs font-medium text-dim uppercase tracking-wide mb-1.5">{label}</p>
+      <p className={`text-2xl font-bold tracking-tight ${isNegative ? 'text-accent-red' : valueClass}`}>
         {fmt.format(amount)}
       </p>
     </div>
@@ -37,25 +34,25 @@ export function SummaryCards({ totalIncome, totalExpense, balance }) {
         valueClass="text-green-600"
         iconBg="bg-green-50"
         iconColor="text-green-600"
-        accent="border-gray-100"
+        badge="IN"
       />
       <Card
         label="Total Expenses"
         amount={totalExpense}
         icon={TrendingDown}
-        valueClass="text-red-500"
+        valueClass="text-accent-red"
         iconBg="bg-red-50"
-        iconColor="text-red-500"
-        accent="border-gray-100"
+        iconColor="text-accent-red"
+        badge="OUT"
       />
       <Card
         label="Balance"
         amount={balance}
         icon={Wallet}
-        valueClass={balance >= 0 ? 'text-brand-600' : 'text-orange-500'}
-        iconBg={balance >= 0 ? 'bg-brand-50' : 'bg-orange-50'}
-        iconColor={balance >= 0 ? 'text-brand-600' : 'text-orange-500'}
-        accent="border-gray-100"
+        valueClass="text-ink"
+        iconBg="bg-canvas"
+        iconColor="text-ink"
+        badge="NET"
       />
     </div>
   )

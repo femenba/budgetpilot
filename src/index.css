@@ -15,7 +15,7 @@
   }
 
   body {
-    @apply text-gray-900 bg-gray-50 antialiased;
+    @apply text-ink bg-canvas antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
@@ -30,28 +30,21 @@
 }
 
 @layer utilities {
-  /* Gradient border trick */
-  .border-gradient-purple {
-    background: linear-gradient(white, white) padding-box,
-                linear-gradient(135deg, #7c3aed, #3b82f6) border-box;
-    border: 2px solid transparent;
-  }
-
-  /* "Not Boring" pill label */
+  /* Pill label */
   .pill {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold;
   }
 
-  .pill-purple {
-    @apply pill bg-brand-100 text-brand-700;
+  .pill-dark {
+    @apply pill bg-brand-100 text-brand-600;
   }
 
   .pill-green {
     @apply pill bg-green-100 text-green-700;
   }
 
-  .pill-yellow {
-    @apply pill bg-yellow-100 text-yellow-700;
+  .pill-red {
+    @apply pill bg-red-100 text-red-600;
   }
 
   /* Tactile button press */

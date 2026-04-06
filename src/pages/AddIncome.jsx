@@ -28,11 +28,10 @@ export default function AddIncome() {
   const [saving,      setSaving]      = useState(false)
   const [saved,       setSaved]       = useState(false)
 
-  // Local category list — seeded from hook, extended by custom additions
   const [categories,   setCategories]   = useState([])
   const [showNewCat,   setShowNewCat]   = useState(false)
   const [newCatName,   setNewCatName]   = useState('')
-  const [newCatColor,  setNewCatColor]  = useState(CAT_COLORS[3]) // default emerald
+  const [newCatColor,  setNewCatColor]  = useState(CAT_COLORS[3])
   const [newCatSaving, setNewCatSaving] = useState(false)
 
   useEffect(() => { setCategories(fetchedCategories) }, [fetchedCategories])
@@ -85,32 +84,32 @@ export default function AddIncome() {
         <div className="flex items-center gap-3 mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 rounded-xl hover:bg-gray-100 text-gray-500 transition-all active:scale-95"
+            className="p-2 rounded-xl hover:bg-canvas text-dim transition-all active:scale-95"
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={18} />
           </button>
           <div>
-            <h1 className="text-2xl font-black text-gray-900 tracking-tight">Add Income</h1>
-            <p className="text-sm text-gray-400 font-medium">Record a new income entry</p>
+            <h1 className="text-xl font-bold text-ink tracking-tight">Add Income</h1>
+            <p className="text-sm text-dim">Record a new income entry</p>
           </div>
         </div>
 
         {saved ? (
           <div className="flex flex-col items-center py-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mb-4">
-              <CheckCircle2 size={34} className="text-emerald-500" />
+            <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center mb-4">
+              <CheckCircle2 size={28} className="text-green-600" />
             </div>
-            <h2 className="text-lg font-bold text-gray-900">Income saved!</h2>
-            <p className="text-gray-500 text-sm mt-1">Redirecting to dashboard…</p>
+            <h2 className="text-base font-semibold text-ink">Income saved!</h2>
+            <p className="text-dim text-sm mt-1">Redirecting to dashboard…</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
             {/* Amount */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <label className="block text-sm font-semibold text-gray-700 mb-3">Amount</label>
+            <div className="bg-surface rounded-2xl border border-line shadow-card p-5">
+              <label className="block text-xs font-medium text-dim uppercase tracking-wide mb-3">Amount</label>
               <div className="flex items-center gap-3">
-                <span className="text-3xl font-bold text-gray-300">{symbol}</span>
+                <span className="text-2xl font-semibold text-dim">{symbol}</span>
                 <input
                   type="number"
                   step="0.01"
@@ -119,20 +118,20 @@ export default function AddIncome() {
                   onChange={e => setAmount(e.target.value)}
                   placeholder="0.00"
                   required
-                  className="flex-1 text-4xl font-bold text-emerald-600 bg-transparent border-none outline-none placeholder:text-gray-200 w-full"
+                  className="flex-1 text-4xl font-bold text-green-600 bg-transparent border-none outline-none placeholder:text-line w-full"
                   autoFocus
                 />
               </div>
-              <div className="mt-3 h-px bg-gradient-to-r from-emerald-200 via-emerald-100 to-transparent" />
+              <div className="mt-3 h-px bg-gradient-to-r from-green-200 via-green-100 to-transparent" />
             </div>
 
             {/* Category */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <label className="block text-sm font-semibold text-gray-700 mb-3">Category</label>
+            <div className="bg-surface rounded-2xl border border-line shadow-card p-5">
+              <label className="block text-xs font-medium text-dim uppercase tracking-wide mb-3">Category</label>
               {catLoading ? (
                 <div className="flex gap-2 flex-wrap animate-pulse">
                   {[...Array(6)].map((_, i) => (
-                    <div key={i} className="h-9 w-24 bg-gray-100 rounded-xl" />
+                    <div key={i} className="h-9 w-24 bg-line rounded-xl" />
                   ))}
                 </div>
               ) : (
@@ -149,7 +148,7 @@ export default function AddIncome() {
                             flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium border-2 transition-all
                             ${active
                               ? 'text-white border-transparent shadow-sm scale-105'
-                              : 'border-gray-100 bg-gray-50 text-gray-600 hover:border-gray-200 hover:bg-gray-100'
+                              : 'border-line bg-canvas text-dim hover:border-gray-300 hover:bg-line'
                             }
                           `}
                           style={active ? { backgroundColor: cat.color, borderColor: cat.color } : {}}
@@ -166,7 +165,7 @@ export default function AddIncome() {
                       <button
                         type="button"
                         onClick={() => setShowNewCat(true)}
-                        className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium border-2 border-dashed border-gray-200 text-gray-400 hover:border-emerald-300 hover:text-emerald-600 transition-all"
+                        className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium border-2 border-dashed border-line text-dim hover:border-gray-300 hover:text-ink transition-all"
                       >
                         <Plus size={14} />
                         New
@@ -174,9 +173,8 @@ export default function AddIncome() {
                     )}
                   </div>
 
-                  {/* Inline new-category form */}
                   {showNewCat && (
-                    <div className="mt-3 p-3 rounded-xl border border-gray-200 bg-gray-50 flex flex-col gap-3">
+                    <div className="mt-3 p-3 rounded-xl border border-line bg-canvas flex flex-col gap-3">
                       <div className="flex items-center gap-2">
                         <input
                           type="text"
@@ -186,18 +184,18 @@ export default function AddIncome() {
                           placeholder="Category name"
                           maxLength={40}
                           autoFocus
-                          className="flex-1 px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent placeholder:text-gray-300 transition"
+                          className="flex-1 px-3 py-2 rounded-lg border border-line bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-ink focus:border-transparent placeholder:text-gray-400 transition"
                         />
                         <button
                           type="button"
                           onClick={() => { setShowNewCat(false); setNewCatName(''); setNewCatColor(CAT_COLORS[3]) }}
-                          className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors"
+                          className="p-2 rounded-lg text-dim hover:text-ink hover:bg-line transition-colors"
                         >
                           <X size={14} />
                         </button>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-500 shrink-0">Color:</span>
+                        <span className="text-xs text-dim shrink-0">Color:</span>
                         <div className="flex gap-1.5 flex-wrap">
                           {CAT_COLORS.map(c => (
                             <button
@@ -214,7 +212,7 @@ export default function AddIncome() {
                         type="button"
                         onClick={handleCreateCategory}
                         disabled={!newCatName.trim() || newCatSaving}
-                        className="self-start px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-semibold transition-colors"
+                        className="self-start px-4 py-1.5 rounded-lg bg-ink hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-semibold transition-colors"
                       >
                         {newCatSaving ? 'Saving…' : 'Add category'}
                       </button>
@@ -225,43 +223,43 @@ export default function AddIncome() {
             </div>
 
             {/* Description + Date */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col gap-4">
+            <div className="bg-surface rounded-2xl border border-line shadow-card p-5 flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-semibold text-gray-700">Description <span className="text-gray-400 font-normal">(optional)</span></label>
+                <label className="text-xs font-medium text-dim uppercase tracking-wide">Description <span className="normal-case font-normal">(optional)</span></label>
                 <input
                   type="text"
                   value={description}
                   onChange={e => setDescription(e.target.value)}
                   placeholder="e.g. Monthly salary from Acme Inc."
                   maxLength={200}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent focus:bg-white placeholder:text-gray-300 transition"
+                  className="w-full px-4 py-3 rounded-xl border border-line bg-canvas text-sm focus:outline-none focus:ring-2 focus:ring-ink focus:border-transparent focus:bg-surface placeholder:text-gray-400 transition"
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-semibold text-gray-700">Date</label>
+                <label className="text-xs font-medium text-dim uppercase tracking-wide">Date</label>
                 <input
                   type="date"
                   value={date}
                   onChange={e => setDate(e.target.value)}
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent focus:bg-white transition"
+                  className="w-full px-4 py-3 rounded-xl border border-line bg-canvas text-sm focus:outline-none focus:ring-2 focus:ring-ink focus:border-transparent focus:bg-surface transition"
                 />
               </div>
 
               {/* Recurring toggle */}
               <div className="flex items-center justify-between py-1">
                 <div className="flex items-center gap-2.5">
-                  <RotateCcw size={16} className="text-gray-400" />
+                  <RotateCcw size={15} className="text-dim" />
                   <div>
-                    <p className="text-sm font-semibold text-gray-700">Recurring income</p>
-                    <p className="text-xs text-gray-400">Mark as a repeating entry</p>
+                    <p className="text-sm font-medium text-ink">Recurring income</p>
+                    <p className="text-xs text-dim">Mark as a repeating entry</p>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => setRecurring(v => !v)}
-                  className={`relative w-11 h-6 rounded-full transition-colors ${recurring ? 'bg-emerald-500' : 'bg-gray-200'}`}
+                  className={`relative w-11 h-6 rounded-full transition-colors ${recurring ? 'bg-green-600' : 'bg-line'}`}
                 >
                   <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${recurring ? 'translate-x-5' : ''}`} />
                 </button>
@@ -270,7 +268,7 @@ export default function AddIncome() {
 
             {/* Error */}
             {error && (
-              <div className="flex items-start gap-2 px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+              <div className="flex items-start gap-2 px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-sm text-accent-red">
                 <span className="mt-0.5 shrink-0">⚠</span>
                 <span>{error}</span>
               </div>
@@ -278,12 +276,12 @@ export default function AddIncome() {
 
             {/* Summary bar */}
             {amount && parseFloat(amount) > 0 && (
-              <div className="flex items-center justify-between px-4 py-3 bg-emerald-50 rounded-xl border border-emerald-100">
-                <div className="text-sm text-emerald-700">
-                  <span className="font-semibold">{selectedCat?.name ?? 'Uncategorized'}</span>
-                  {description && <span className="text-emerald-600 ml-1">· {description}</span>}
+              <div className="flex items-center justify-between px-4 py-3 bg-green-50 rounded-xl border border-green-100">
+                <div className="text-sm text-green-700">
+                  <span className="font-medium">{selectedCat?.name ?? 'Uncategorized'}</span>
+                  {description && <span className="text-green-600 ml-1">· {description}</span>}
                 </div>
-                <span className="text-emerald-700 font-bold text-sm">
+                <span className="text-green-700 font-semibold text-sm">
                   +{fmt.format(parseFloat(amount))}
                 </span>
               </div>
@@ -294,14 +292,14 @@ export default function AddIncome() {
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="flex-1 py-3.5 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-3.5 rounded-xl border border-line bg-surface text-sm font-medium text-dim hover:bg-canvas transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-bold transition-all shadow-sm"
+                className="flex-1 py-3.5 rounded-xl bg-green-600 hover:bg-green-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold transition-all shadow-sm"
               >
                 {saving ? (
                   <span className="flex items-center justify-center gap-2">

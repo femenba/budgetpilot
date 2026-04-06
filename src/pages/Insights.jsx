@@ -70,8 +70,8 @@ function TopCategoryCard({ expenses }) {
 
   return (
     <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center gap-4">
-      <div className="p-3 rounded-xl bg-purple-50">
-        <Tag size={22} className="text-purple-600" />
+      <div className="p-3 rounded-xl bg-gray-100">
+        <Tag size={22} className="text-dim" />
       </div>
       <div>
         <p className="text-sm text-gray-500 font-medium">Top Spending Category</p>

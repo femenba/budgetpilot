@@ -63,7 +63,7 @@ export default function Register() {
   return (
     <div className="min-h-screen flex">
       {/* ── Left panel ─────────────────────────────────────── */}
-      <div className="hidden lg:flex flex-col justify-center w-[480px] shrink-0 bg-gradient-to-br from-brand-700 via-brand-800 to-slate-900 px-12 py-14 text-white">
+      <div className="hidden lg:flex flex-col justify-center w-[480px] shrink-0 bg-gradient-to-br from-[#111111] to-[#2A2A2A] px-12 py-14 text-white">
         <div className="flex items-center gap-3 mb-16">
           <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center">
             <span className="font-bold text-xl">B</span>
@@ -83,7 +83,7 @@ export default function Register() {
       <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 px-4 py-12">
         {/* Mobile logo */}
         <div className="flex items-center gap-2 mb-10 lg:hidden">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-xl bg-[#111111] flex items-center justify-center">
             <span className="text-white font-bold">B</span>
           </div>
           <span className="text-xl font-bold text-gray-900">BudgetPilot</span>

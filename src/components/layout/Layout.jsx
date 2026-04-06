@@ -23,7 +23,6 @@ const NAV_PRO = [
   { to: '/budgets',  icon: Target,    label: 'Budgets'  },
 ]
 
-// Mobile bottom nav: 4 fixed items + 1 context-aware "More" slot
 const NAV_MOBILE_CORE = [
   { to: '/',             end: true, icon: LayoutDashboard, label: 'Dashboard'    },
   { to: '/transactions',            icon: ArrowLeftRight,  label: 'Transactions' },
@@ -36,13 +35,13 @@ function NavItem({ to, end, icon: Icon, label, accent, onClick }) {
     ? 'bg-green-50 text-green-700'
     : accent === 'red'
     ? 'bg-red-50 text-red-600'
-    : 'bg-brand-50 text-brand-700'
+    : 'bg-ink text-white'
 
   const accentIcon = accent === 'emerald'
     ? 'text-green-600'
     : accent === 'red'
     ? 'text-red-500'
-    : 'text-brand-600'
+    : 'text-white'
 
   return (
     <NavLink
@@ -52,8 +51,8 @@ function NavItem({ to, end, icon: Icon, label, accent, onClick }) {
       className={({ isActive }) =>
         `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
           isActive
-            ? `${accentActive} font-semibold shadow-sm`
-            : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+            ? `${accentActive} font-semibold`
+            : 'text-dim hover:text-ink hover:bg-canvas'
         }`
       }
     >
@@ -68,7 +67,7 @@ function NavItem({ to, end, icon: Icon, label, accent, onClick }) {
 }
 
 function MobileNavItem({ to, end, icon: Icon, label, accent }) {
-  const accentColor = accent === 'emerald' ? 'text-green-500' : accent === 'red' ? 'text-red-500' : 'text-brand-600'
+  const accentColor = accent === 'emerald' ? 'text-green-600' : accent === 'red' ? 'text-red-500' : 'text-ink'
 
   return (
     <NavLink
@@ -76,7 +75,7 @@ function MobileNavItem({ to, end, icon: Icon, label, accent }) {
       end={end}
       className={({ isActive }) =>
         `flex-1 flex flex-col items-center justify-center gap-1 py-2 text-[10px] font-semibold transition-colors ${
-          isActive ? accentColor : 'text-gray-400 hover:text-gray-600'
+          isActive ? accentColor : 'text-gray-400 hover:text-dim'
         }`
       }
     >
@@ -111,22 +110,22 @@ function MobileMoreSheet({ open, onClose, isPro }) {
     <div className="fixed inset-0 z-50 flex flex-col justify-end">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Sheet */}
-      <div className="relative bg-white rounded-t-3xl shadow-2xl px-4 pt-4 pb-8 safe-bottom border-t border-gray-100">
+      <div className="relative bg-surface rounded-t-3xl shadow-2xl px-4 pt-4 pb-8 safe-bottom border-t border-line">
         {/* Handle */}
-        <div className="w-10 h-1.5 bg-gray-200 rounded-full mx-auto mb-5" />
+        <div className="w-10 h-1.5 bg-line rounded-full mx-auto mb-5" />
 
         <div className="flex items-center justify-between mb-4 px-1">
-          <span className="text-base font-bold text-gray-900">
+          <span className="text-base font-semibold text-ink">
             {isPro ? 'Pro Features' : 'More'}
           </span>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+            className="p-1.5 rounded-lg text-dim hover:text-ink hover:bg-canvas transition-colors"
           >
             <X size={16} />
           </button>
@@ -141,18 +140,18 @@ function MobileMoreSheet({ open, onClose, isPro }) {
                 onClick={onClose}
                 className={({ isActive }) =>
                   `flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-colors ${
-                    isActive ? 'bg-brand-50' : 'hover:bg-gray-50'
+                    isActive ? 'bg-canvas' : 'hover:bg-canvas'
                   }`
                 }
               >
                 {({ isActive }) => (
                   <>
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isActive ? 'bg-brand-100' : 'bg-gray-100'}`}>
-                      <Icon size={18} className={isActive ? 'text-brand-600' : 'text-gray-500'} />
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isActive ? 'bg-ink' : 'bg-line'}`}>
+                      <Icon size={18} className={isActive ? 'text-white' : 'text-dim'} />
                     </div>
                     <div className="min-w-0">
-                      <p className={`text-sm font-semibold ${isActive ? 'text-brand-700' : 'text-gray-800'}`}>{label}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
+                      <p className={`text-sm font-semibold ${isActive ? 'text-ink' : 'text-gray-800'}`}>{label}</p>
+                      <p className="text-xs text-dim mt-0.5">{sub}</p>
                     </div>
                   </>
                 )}
@@ -161,50 +160,49 @@ function MobileMoreSheet({ open, onClose, isPro }) {
             <NavLink
               to="/plans"
               onClick={onClose}
-              className="flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-gray-50 transition-colors mt-1 border-t border-gray-100 pt-3"
+              className="flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-canvas transition-colors mt-1 border-t border-line pt-3"
             >
-              <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
-                <CreditCard size={18} className="text-gray-500" />
+              <div className="w-10 h-10 rounded-xl bg-line flex items-center justify-center shrink-0">
+                <CreditCard size={18} className="text-dim" />
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-gray-800">Plans</p>
-                <p className="text-xs text-gray-400 mt-0.5">Manage your subscription</p>
+                <p className="text-xs text-dim mt-0.5">Manage your subscription</p>
               </div>
             </NavLink>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
-            {/* Upgrade card */}
-            <div className="rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 p-5 shadow-lg">
+            {/* Upgrade card — dark monochrome */}
+            <div className="rounded-2xl bg-ink p-5 shadow-md">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center">
-                  <Zap size={14} className="text-yellow-300" fill="currentColor" />
+                <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
+                  <Zap size={14} className="text-white" strokeWidth={2.5} />
                 </div>
-                <span className="text-sm font-bold text-white">Upgrade to Pro</span>
-                <span className="ml-auto text-xs font-bold text-white/80 bg-white/20 px-2 py-0.5 rounded-full">£5/mo</span>
+                <span className="text-sm font-semibold text-white">Upgrade to Pro</span>
+                <span className="ml-auto text-xs font-semibold text-white/60 bg-white/10 px-2 py-0.5 rounded-full">£5/mo</span>
               </div>
-              <p className="text-xs text-white/70 leading-relaxed mb-4">
-                Unlock Insights, Reports, Budget tracking, multiple currencies, and more. Cancel anytime.
+              <p className="text-xs text-white/50 leading-relaxed mb-4">
+                Unlock Insights, Reports, Budget tracking, multiple currencies, and more.
               </p>
               <NavLink
                 to="/plans"
                 onClick={onClose}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white text-brand-700 text-sm font-bold hover:bg-brand-50 transition-colors"
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white text-ink text-sm font-semibold hover:bg-canvas transition-colors"
               >
-                <Zap size={14} className="text-yellow-500" fill="currentColor" />
                 View plans
               </NavLink>
             </div>
 
             {/* Locked pro links */}
-            <div className="flex flex-col gap-1 opacity-40 pointer-events-none">
+            <div className="flex flex-col gap-1 opacity-35 pointer-events-none">
               {proLinks.map(({ to, icon: Icon, label, sub }) => (
                 <div key={to} className="flex items-center gap-4 px-4 py-3.5 rounded-2xl">
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
-                    <Icon size={18} className="text-gray-400" />
+                  <div className="w-10 h-10 rounded-xl bg-line flex items-center justify-center shrink-0">
+                    <Icon size={18} className="text-dim" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-gray-500">{label}</p>
+                    <p className="text-sm font-semibold text-dim">{label}</p>
                     <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
                   </div>
                 </div>
@@ -238,11 +236,8 @@ export function Layout({ children }) {
   const location  = useLocation()
   const [showMore, setShowMore] = useState(false)
 
-  // Close sheet on navigation
   useEffect(() => { setShowMore(false) }, [location.pathname])
 
-  // Keep refs so the inactivity callback always uses the latest versions
-  // without causing the effect to re-run (and reset the timer) on re-renders.
   const signOutRef = useRef(signOut)
   const navigateRef = useRef(navigate)
   signOutRef.current = signOut
@@ -266,7 +261,7 @@ export function Layout({ children }) {
       clearTimeout(timer)
       ACTIVITY_EVENTS.forEach(e => window.removeEventListener(e, reset))
     }
-  }, []) // intentionally empty — refs keep callbacks current without restarting the timer
+  }, [])
 
   const [showUpgradeMsg, setShowUpgradeMsg] = useState(false)
   const upgradeMsgTimer = useRef(null)
@@ -293,18 +288,18 @@ export function Layout({ children }) {
   const initials = user?.email?.slice(0, 2).toUpperCase() ?? 'U'
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-canvas">
       {/* ── Desktop Sidebar ─────────────────────────────────────── */}
-      <aside className="hidden md:flex flex-col w-60 bg-white border-r border-gray-100 fixed inset-y-0 left-0 z-20">
+      <aside className="hidden md:flex flex-col w-60 bg-surface border-r border-line fixed inset-y-0 left-0 z-20">
         {/* Logo */}
-        <div className="flex items-center gap-2.5 px-5 h-16 border-b border-gray-100 shrink-0">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-sm">
-            <span className="text-white font-black text-sm tracking-tighter">B</span>
+        <div className="flex items-center gap-2.5 px-5 h-16 border-b border-line shrink-0">
+          <div className="w-8 h-8 rounded-xl bg-ink flex items-center justify-center shadow-sm shrink-0">
+            <span className="text-white font-bold text-sm tracking-tight">B</span>
           </div>
           <div>
-            <span className="font-black text-gray-900 text-base tracking-tight">BudgetPilot</span>
+            <span className="font-bold text-ink text-base tracking-tight">BudgetPilot</span>
             {isPro && (
-              <span className="ml-1.5 text-[9px] font-bold bg-brand-100 text-brand-700 px-1.5 py-0.5 rounded-full uppercase tracking-wide">Pro</span>
+              <span className="ml-1.5 text-[9px] font-semibold bg-brand-100 text-dim px-1.5 py-0.5 rounded-full uppercase tracking-wide">Pro</span>
             )}
           </div>
         </div>
@@ -313,37 +308,35 @@ export function Layout({ children }) {
         <nav className="flex-1 px-3 py-4 flex flex-col gap-0.5 overflow-y-auto">
           {NAV_CORE.map(item => <NavItem key={item.to} {...item} />)}
 
-          <div className="my-2 h-px bg-gray-100" />
+          <div className="my-2 h-px bg-line" />
 
           <NavItem to="/plans" icon={CreditCard} label="Plans" />
 
           {isPro && (
             <>
-              <p className="px-3 pt-4 pb-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Pro</p>
+              <p className="px-3 pt-4 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Pro</p>
               {NAV_PRO.map(item => <NavItem key={item.to} {...item} />)}
             </>
           )}
         </nav>
 
         {/* User footer */}
-        <div className="px-3 pb-4 border-t border-gray-100 pt-3 shrink-0">
-          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl mb-2 bg-gray-50">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shrink-0 shadow-sm">
-              <span className="text-white text-xs font-bold">{initials}</span>
+        <div className="px-3 pb-4 border-t border-line pt-3 shrink-0">
+          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl mb-2 bg-canvas">
+            <div className="w-8 h-8 rounded-full bg-ink flex items-center justify-center shrink-0">
+              <span className="text-white text-xs font-semibold">{initials}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-gray-800 truncate">{user?.email}</p>
-              <p className="text-[10px] text-gray-400 font-medium">
-                {isPro ? (
-                  <span className="text-brand-600 font-semibold">Pro plan</span>
-                ) : 'Free plan'}
+              <p className="text-xs font-medium text-ink truncate">{user?.email}</p>
+              <p className="text-[10px] text-dim font-medium mt-0.5">
+                {isPro ? 'Pro plan' : 'Free plan'}
               </p>
             </div>
           </div>
           <select
             value={profile?.currency ?? 'USD'}
             onChange={handleCurrencyChange}
-            className="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-500 transition mb-1.5 hover:border-gray-300"
+            className="w-full px-3 py-2 rounded-xl border border-line bg-surface text-xs text-dim focus:outline-none focus:ring-2 focus:ring-ink transition mb-1.5 hover:border-gray-300"
           >
             {CURRENCIES.map(c => (
               <option key={c.code} value={c.code}>{c.label}</option>
@@ -356,7 +349,7 @@ export function Layout({ children }) {
           )}
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all duration-150"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-dim hover:text-accent-red hover:bg-red-50 transition-all duration-150"
           >
             <LogOut size={15} />
             <span>Sign out</span>
@@ -367,19 +360,16 @@ export function Layout({ children }) {
       {/* ── Main Content ─────────────────────────────────────────── */}
       <div className="flex-1 md:ml-60 flex flex-col min-h-screen overflow-x-hidden">
         {/* Mobile top bar */}
-        <header className="md:hidden bg-white border-b border-gray-100 sticky top-0 z-10 shadow-sm">
+        <header className="md:hidden bg-surface border-b border-line sticky top-0 z-10 shadow-sm">
           <div className="h-14 flex items-center justify-between px-4">
             <div className="flex items-center gap-2 min-w-0 overflow-hidden">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shrink-0 shadow-sm">
-                <span className="text-white font-black text-xs">B</span>
+              <div className="w-7 h-7 rounded-lg bg-ink flex items-center justify-center shrink-0">
+                <span className="text-white font-bold text-xs">B</span>
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="font-black text-gray-900 text-sm leading-tight truncate">BudgetPilot</span>
-                <span className="text-[9px] leading-tight font-semibold">
-                  {isPro
-                    ? <span className="text-brand-600">Pro plan</span>
-                    : <span className="text-gray-400">Free plan</span>
-                  }
+                <span className="font-bold text-ink text-sm leading-tight truncate">BudgetPilot</span>
+                <span className="text-[9px] leading-tight font-medium text-dim">
+                  {isPro ? 'Pro plan' : 'Free plan'}
                 </span>
               </div>
             </div>
@@ -388,7 +378,7 @@ export function Layout({ children }) {
                 value={profile?.currency ?? 'USD'}
                 onChange={handleCurrencyChange}
                 aria-label="Currency"
-                className="text-xs font-semibold text-gray-700 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500 transition"
+                className="text-xs font-medium text-dim bg-canvas border border-line rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-ink transition"
               >
                 {CURRENCIES.map(c => (
                   <option key={c.code} value={c.code}>{c.code}</option>
@@ -397,7 +387,7 @@ export function Layout({ children }) {
               <button
                 onClick={handleSignOut}
                 aria-label="Sign out"
-                className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-lg text-dim hover:text-accent-red hover:bg-red-50 transition-colors"
               >
                 <LogOut size={16} />
               </button>
@@ -419,14 +409,14 @@ export function Layout({ children }) {
       </div>
 
       {/* ── Mobile Bottom Nav ────────────────────────────────────── */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 z-20 flex shadow-[0_-4px_12px_0_rgb(0,0,0,0.06)]">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-surface border-t border-line z-20 flex shadow-[0_-2px_8px_0_rgb(0,0,0,0.06)]">
         {NAV_MOBILE_CORE.map(item => <MobileNavItem key={item.to} {...item} />)}
 
-        {/* More / Pro button */}
+        {/* More / Upgrade button */}
         <button
           onClick={() => setShowMore(true)}
           className={`flex-1 flex flex-col items-center justify-center gap-1 py-2 text-[10px] font-semibold transition-colors ${
-            showMore ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'
+            showMore ? 'text-ink' : 'text-gray-400 hover:text-dim'
           }`}
         >
           {isPro ? (
@@ -436,8 +426,8 @@ export function Layout({ children }) {
             </>
           ) : (
             <>
-              <Zap size={20} strokeWidth={showMore ? 2.5 : 1.8} className={showMore ? 'text-brand-600' : 'text-yellow-500'} />
-              <span className={showMore ? '' : 'text-yellow-600'}>Upgrade</span>
+              <Zap size={20} strokeWidth={showMore ? 2.5 : 1.8} />
+              <span>Upgrade</span>
             </>
           )}
         </button>

@@ -13,15 +13,15 @@ export function Modal({ open, onClose, title, children }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/60">
-          <h2 className="text-base font-bold text-gray-900">{title}</h2>
+      <div className="relative w-full max-w-md bg-surface rounded-2xl shadow-2xl border border-line overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-line bg-canvas/60">
+          <h2 className="text-base font-semibold text-ink">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition-all duration-150"
+            className="p-1.5 rounded-lg text-dim hover:text-ink hover:bg-line transition-all duration-150"
           >
             <X size={16} />
           </button>

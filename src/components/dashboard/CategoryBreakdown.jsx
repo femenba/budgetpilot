@@ -18,25 +18,24 @@ function CustomTooltip({ active, payload }) {
   if (!active || !payload?.length) return null
   const { name, value, color } = payload[0].payload
   return (
-    <div className="bg-white border border-gray-200 rounded-xl shadow-lg px-3 py-2.5 text-sm">
+    <div className="bg-surface border border-line rounded-xl shadow-card-md px-3 py-2.5 text-sm">
       <div className="flex items-center gap-2 mb-0.5">
         <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
-        <span className="font-semibold text-gray-700">{name}</span>
+        <span className="font-medium text-ink">{name}</span>
       </div>
-      <span className="text-gray-500 text-xs">{fmt.format(value)}</span>
+      <span className="text-dim text-xs">{fmt.format(value)}</span>
     </div>
   )
 }
 
-/** Renders the total amount in the centre of the donut */
 function CenterLabel({ cx, cy, total, type }) {
   const { fmtCompact } = useCurrency()
   return (
     <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
-      <tspan x={cx} dy="-6" fontSize="15" fontWeight="700" fill="#111827">
+      <tspan x={cx} dy="-6" fontSize="15" fontWeight="700" fill="#111111">
         {fmtCompact.format(total)}
       </tspan>
-      <tspan x={cx} dy="18" fontSize="10" fill="#9ca3af">
+      <tspan x={cx} dy="18" fontSize="10" fill="#6B6B6B">
         total {type}
       </tspan>
     </text>
@@ -57,20 +56,20 @@ export function CategoryBreakdown({ transactions }) {
     : topItems
 
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col">
+    <div className="bg-surface rounded-2xl p-5 shadow-card border border-line flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold text-gray-800">By Category</h3>
-        <div className="flex rounded-xl overflow-hidden border border-gray-200 bg-gray-50 p-0.5 gap-0.5">
+        <h3 className="text-sm font-semibold text-ink">By Category</h3>
+        <div className="flex rounded-xl overflow-hidden border border-line bg-canvas p-0.5 gap-0.5">
           {[
-            { val: 'expense', label: 'Spent',  activeClass: 'bg-red-500 text-white' },
-            { val: 'income',  label: 'Earned', activeClass: 'bg-emerald-500 text-white' },
+            { val: 'expense', label: 'Spent',  activeClass: 'bg-ink text-white' },
+            { val: 'income',  label: 'Earned', activeClass: 'bg-green-600 text-white' },
           ].map(o => (
             <button
               key={o.val}
               onClick={() => setActiveType(o.val)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                activeType === o.val ? o.activeClass : 'text-gray-400 hover:text-gray-700'
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                activeType === o.val ? o.activeClass : 'text-dim hover:text-ink'
               }`}
             >
               {o.label}
@@ -81,7 +80,7 @@ export function CategoryBreakdown({ transactions }) {
 
       {/* Donut */}
       {data.length === 0 ? (
-        <div className="flex flex-col items-center justify-center flex-1 min-h-[160px] text-gray-400 text-sm">
+        <div className="flex flex-col items-center justify-center flex-1 min-h-[160px] text-dim text-sm">
           <span className="text-3xl mb-2">{activeType === 'expense' ? '🛒' : '💰'}</span>
           No data yet
         </div>
@@ -119,9 +118,9 @@ export function CategoryBreakdown({ transactions }) {
               return (
                 <div key={item.name} className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-                  <span className="text-xs text-gray-600 flex-1 truncate">{item.name}</span>
-                  <span className="text-xs font-semibold text-gray-700 tabular-nums">{fmt.format(item.value)}</span>
-                  <span className="text-xs text-gray-400 w-8 text-right">{pct.toFixed(0)}%</span>
+                  <span className="text-xs text-dim flex-1 truncate">{item.name}</span>
+                  <span className="text-xs font-medium text-ink tabular-nums">{fmt.format(item.value)}</span>
+                  <span className="text-xs text-dim w-8 text-right">{pct.toFixed(0)}%</span>
                 </div>
               )
             })}
