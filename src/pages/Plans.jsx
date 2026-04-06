@@ -1,4 +1,5 @@
-import { Check, Zap, Star } from 'lucide-react'
+import { useState } from 'react'
+import { Check, Zap, Star, Loader } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { Layout } from '../components/layout/Layout'
 
@@ -19,8 +20,32 @@ const PRO_FEATURES = [
 ]
 
 export default function Plans() {
-  const { profile } = useAuth()
+  const { user, profile } = useAuth()
   const isPro = profile?.plan === 'pro'
+  const [upgrading, setUpgrading] = useState(false)
+  const [upgradeError, setUpgradeError] = useState(null)
+
+  async function handleUpgrade() {
+    setUpgradeError(null)
+    setUpgrading(true)
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, email: user.email }),
+      })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setUpgradeError(data.error ?? 'Something went wrong. Please try again.')
+      }
+    } catch {
+      setUpgradeError('Network error. Please try again.')
+    } finally {
+      setUpgrading(false)
+    }
+  }
 
   return (
     <Layout>
@@ -112,10 +137,23 @@ export default function Plans() {
             </ul>
 
             {!isPro && (
-              <button className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 active:scale-[0.98] text-white text-sm font-bold transition-all shadow-sm flex items-center justify-center gap-2">
-                <Zap size={14} fill="currentColor" />
-                Upgrade to Pro · £5/mo
-              </button>
+              <>
+                <button
+                  onClick={handleUpgrade}
+                  disabled={upgrading}
+                  className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-bold transition-all shadow-sm flex items-center justify-center gap-2"
+                >
+                  {upgrading ? (
+                    <Loader size={14} className="animate-spin" />
+                  ) : (
+                    <Zap size={14} fill="currentColor" />
+                  )}
+                  {upgrading ? 'Redirecting…' : 'Upgrade to Pro · £5/mo'}
+                </button>
+                {upgradeError && (
+                  <p className="mt-2 text-xs text-red-500 font-medium text-center">{upgradeError}</p>
+                )}
+              </>
             )}
 
             {isPro && (

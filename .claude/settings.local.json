@@ -1,4 +1,10 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npm install:*)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -33,11 +39,6 @@
           }
         ]
       }
-    ]
-  },
-  "permissions": {
-    "allow": [
-      "Bash(npm run:*)"
     ]
   }
 }

@@ -15,6 +15,8 @@ import Insights       from './pages/Insights'
 import Reports        from './pages/Reports'
 import Budgets        from './pages/Budgets'
 import AdminDashboard from './pages/AdminDashboard'
+import CheckoutSuccess from './pages/CheckoutSuccess'
+import CheckoutCancel  from './pages/CheckoutCancel'
 
 export default function App() {
   return (
@@ -50,6 +52,10 @@ export default function App() {
           <Route path="/insights" element={<ProRoute><Insights /></ProRoute>} />
           <Route path="/reports"  element={<ProRoute><Reports /></ProRoute>}  />
           <Route path="/budgets"  element={<ProRoute><Budgets /></ProRoute>}  />
+
+          {/* Stripe checkout callbacks — no auth required */}
+          <Route path="/checkout/success" element={<CheckoutSuccess />} />
+          <Route path="/checkout/cancel"  element={<CheckoutCancel />}  />
 
           {/* Admin-only */}
           <Route path="/admin" element={
