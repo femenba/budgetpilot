@@ -242,3 +242,37 @@ values
   ('00000002-0000-0000-0000-00000000000a', 'Other Expense', 'expense', '#6b7280', 'more-horizontal', true, 99)
 on conflict (id) do update
   set name = excluded.name, color = excluded.color, icon = excluded.icon, sort_order = excluded.sort_order;
+
+
+-- ================================================================
+-- 8. BUDGETS
+--    Monthly budget cap per category, per user.
+-- ================================================================
+create table if not exists public.budgets (
+  id            uuid          primary key default gen_random_uuid(),
+  user_id       uuid          not null references public.profiles(id) on delete cascade,
+  category_id   uuid          not null references public.categories(id) on delete cascade,
+  amount        numeric(14,2) not null check (amount > 0),
+  month         smallint      not null check (month between 1 and 12),
+  year          smallint      not null,
+  created_at    timestamptz   not null default now(),
+  updated_at    timestamptz   not null default now(),
+
+  -- One budget per category per month per user
+  constraint uq_budget unique (user_id, category_id, month, year)
+);
+
+comment on table public.budgets is 'Monthly spending caps per category per user.';
+
+create index if not exists idx_budgets_user_month on public.budgets (user_id, year, month);
+
+drop trigger if exists budgets_updated_at on public.budgets;
+create trigger budgets_updated_at
+  before update on public.budgets
+  for each row execute procedure public.set_updated_at();
+
+alter table public.budgets enable row level security;
+
+drop policy if exists "budgets: own rows" on public.budgets;
+create policy "budgets: own rows" on public.budgets
+  for all using (user_id = auth.uid());

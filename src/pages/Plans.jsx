@@ -46,7 +46,7 @@ export default function Plans() {
               )}
             </div>
             <p className="text-2xl font-bold text-gray-900 mb-4">
-              $0<span className="text-sm font-normal text-gray-400">/mo</span>
+              £0<span className="text-sm font-normal text-gray-400">/mo</span>
             </p>
             <ul className="space-y-2.5">
               {FREE_FEATURES.map(f => (
@@ -68,13 +68,14 @@ export default function Plans() {
                 </span>
               ) : (
                 <span className="text-[10px] font-semibold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
-                  Upgrade
+                  £5/mo
                 </span>
               )}
             </div>
-            <p className="text-2xl font-bold text-gray-900 mb-4">
-              $9<span className="text-sm font-normal text-gray-400">/mo</span>
+            <p className="text-2xl font-bold text-gray-900 mb-1">
+              £5<span className="text-sm font-normal text-gray-400">/mo</span>
             </p>
+            <p className="text-xs text-gray-400 mb-4">Cancel anytime</p>
             <ul className="space-y-2.5">
               {PRO_FEATURES.map(f => (
                 <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
@@ -86,7 +87,7 @@ export default function Plans() {
             {!isPro && (
               <button className="mt-5 w-full py-2.5 rounded-xl bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 transition-colors flex items-center justify-center gap-2">
                 <Zap size={14} />
-                Upgrade to Pro
+                Upgrade to Pro · £5/mo
               </button>
             )}
           </div>

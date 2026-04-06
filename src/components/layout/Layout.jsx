@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, TrendingUp, TrendingDown,
   ArrowLeftRight, LogOut, CreditCard,
-  BarChart2, FileText, Target,
+  BarChart2, FileText, Target, MoreHorizontal, Zap, X,
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -23,13 +23,12 @@ const NAV_PRO = [
   { to: '/budgets',  icon: Target,    label: 'Budgets'  },
 ]
 
-// Mobile bottom nav: fixed 5 items regardless of plan
-const NAV_MOBILE = [
+// Mobile bottom nav: 4 fixed items + 1 context-aware "More" slot
+const NAV_MOBILE_CORE = [
   { to: '/',             end: true, icon: LayoutDashboard, label: 'Dashboard'    },
   { to: '/transactions',            icon: ArrowLeftRight,  label: 'Transactions' },
-  { to: '/plans',                   icon: CreditCard,      label: 'Plans'        },
-  { to: '/income/add',              icon: TrendingUp,      label: 'Add Income',  accent: 'emerald' },
-  { to: '/expense/add',             icon: TrendingDown,    label: 'Add Expense', accent: 'red'     },
+  { to: '/income/add',              icon: TrendingUp,      label: 'Income',      accent: 'emerald' },
+  { to: '/expense/add',             icon: TrendingDown,    label: 'Expense',     accent: 'red'     },
 ]
 
 function NavItem({ to, end, icon: Icon, label, accent, onClick }) {
@@ -84,10 +83,133 @@ function MobileNavItem({ to, end, icon: Icon, label, accent }) {
       {({ isActive }) => (
         <>
           <Icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
-          <span>{label.replace('Add ', '')}</span>
+          <span>{label}</span>
         </>
       )}
     </NavLink>
+  )
+}
+
+// ── Mobile "More" sheet ───────────────────────────────────────────
+function MobileMoreSheet({ open, onClose, isPro }) {
+  useEffect(() => {
+    if (!open) return
+    const handler = (e) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [open, onClose])
+
+  if (!open) return null
+
+  const proLinks = [
+    { to: '/insights', icon: BarChart2, label: 'Insights',  sub: 'Spending patterns & trends'  },
+    { to: '/reports',  icon: FileText,  label: 'Reports',   sub: 'Monthly summaries & exports'  },
+    { to: '/budgets',  icon: Target,    label: 'Budgets',   sub: 'Set limits & track spend'     },
+  ]
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col justify-end">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      {/* Sheet */}
+      <div className="relative bg-white rounded-t-3xl shadow-2xl px-4 pt-4 pb-8 safe-bottom">
+        {/* Handle */}
+        <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-4" />
+
+        <div className="flex items-center justify-between mb-4 px-1">
+          <span className="text-sm font-semibold text-gray-800">
+            {isPro ? 'Pro Features' : 'More'}
+          </span>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {isPro ? (
+          <div className="flex flex-col gap-1">
+            {proLinks.map(({ to, icon: Icon, label, sub }) => (
+              <NavLink
+                key={to}
+                to={to}
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-colors ${
+                    isActive ? 'bg-brand-50' : 'hover:bg-gray-50'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isActive ? 'bg-brand-100' : 'bg-gray-100'}`}>
+                      <Icon size={18} className={isActive ? 'text-brand-600' : 'text-gray-500'} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className={`text-sm font-semibold ${isActive ? 'text-brand-700' : 'text-gray-800'}`}>{label}</p>
+                      <p className="text-xs text-gray-400">{sub}</p>
+                    </div>
+                  </>
+                )}
+              </NavLink>
+            ))}
+            <NavLink
+              to="/plans"
+              onClick={onClose}
+              className="flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-gray-50 transition-colors mt-1 border-t border-gray-100 pt-3"
+            >
+              <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                <CreditCard size={18} className="text-gray-500" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-800">Plans</p>
+                <p className="text-xs text-gray-400">Manage your subscription</p>
+              </div>
+            </NavLink>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            <div className="rounded-2xl bg-gradient-to-br from-brand-50 to-brand-100 border border-brand-200 p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <Zap size={16} className="text-brand-600" />
+                <span className="text-sm font-bold text-brand-800">Upgrade to Pro</span>
+                <span className="ml-auto text-xs font-bold text-brand-700 bg-white border border-brand-200 px-2 py-0.5 rounded-full">£5/mo</span>
+              </div>
+              <p className="text-xs text-brand-700 leading-relaxed mb-4">
+                Unlock Insights, Reports, Budget tracking, multiple currencies, and more. Cancel anytime.
+              </p>
+              <NavLink
+                to="/plans"
+                onClick={onClose}
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 transition-colors"
+              >
+                <Zap size={14} />
+                View plans
+              </NavLink>
+            </div>
+
+            <div className="flex flex-col gap-1 opacity-50 pointer-events-none">
+              {proLinks.map(({ to, icon: Icon, label, sub }) => (
+                <div key={to} className="flex items-center gap-4 px-4 py-3.5 rounded-2xl">
+                  <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                    <Icon size={18} className="text-gray-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-gray-500">{label}</p>
+                    <p className="text-xs text-gray-400">{sub}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -108,7 +230,12 @@ const CURRENCIES = [
 
 export function Layout({ children }) {
   const { user, profile, signOut, updateProfile } = useAuth()
-  const navigate = useNavigate()
+  const navigate  = useNavigate()
+  const location  = useLocation()
+  const [showMore, setShowMore] = useState(false)
+
+  // Close sheet on navigation
+  useEffect(() => { setShowMore(false) }, [location.pathname])
 
   // Keep refs so the inactivity callback always uses the latest versions
   // without causing the effect to re-run (and reset the timer) on re-renders.
@@ -211,7 +338,7 @@ export function Layout({ children }) {
           </select>
           {showUpgradeMsg && (
             <p className="text-[10px] text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-1.5 mb-1 leading-snug">
-              Upgrade to Pro to use multiple currencies
+              Upgrade to Pro (£5/mo) to use multiple currencies
             </p>
           )}
           <button
@@ -261,7 +388,7 @@ export function Layout({ children }) {
           {showUpgradeMsg && (
             <div className="px-4 pb-2">
               <p className="text-[11px] text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 leading-snug">
-                Upgrade to Pro to use multiple currencies
+                Upgrade to Pro (£5/mo) to use multiple currencies
               </p>
             </div>
           )}
@@ -275,8 +402,30 @@ export function Layout({ children }) {
 
       {/* ── Mobile Bottom Nav ────────────────────────────────────── */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 z-20 flex">
-        {NAV_MOBILE.map(item => <MobileNavItem key={item.to} {...item} />)}
+        {NAV_MOBILE_CORE.map(item => <MobileNavItem key={item.to} {...item} />)}
+
+        {/* More / Pro button */}
+        <button
+          onClick={() => setShowMore(true)}
+          className={`flex-1 flex flex-col items-center justify-center gap-1 py-2 text-[10px] font-medium transition-colors ${
+            showMore ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'
+          }`}
+        >
+          {isPro ? (
+            <>
+              <MoreHorizontal size={20} strokeWidth={showMore ? 2.5 : 1.8} />
+              <span>More</span>
+            </>
+          ) : (
+            <>
+              <Zap size={20} strokeWidth={showMore ? 2.5 : 1.8} />
+              <span>Upgrade</span>
+            </>
+          )}
+        </button>
       </nav>
+
+      <MobileMoreSheet open={showMore} onClose={() => setShowMore(false)} isPro={isPro} />
     </div>
   )
 }

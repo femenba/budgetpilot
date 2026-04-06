@@ -22,9 +22,12 @@ export function ProRoute({ children }) {
             <Lock size={22} className="text-amber-600" />
           </div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">Pro feature</h2>
+          <p className="text-sm text-gray-500 mb-2 leading-relaxed">
+            This page is available on the Pro plan.
+          </p>
           <p className="text-sm text-gray-500 mb-6 leading-relaxed">
-            This page is available on the Pro plan.<br />
-            Upgrade to unlock Insights, Reports, and Budgets.
+            Upgrade for <span className="font-semibold text-gray-700">£5/month</span> to unlock
+            Insights, Reports, and Budgets. Cancel anytime.
           </p>
           <a
             href="/plans"
