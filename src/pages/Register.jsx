@@ -4,21 +4,26 @@ import { Eye, EyeOff, CheckCircle2 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
 const rules = [
-  { id: 'length',  test: (p) => p.length >= 8,                        label: 'At least 8 characters'       },
-  { id: 'upper',   test: (p) => /[A-Z]/.test(p),                      label: 'One uppercase letter'         },
-  { id: 'number',  test: (p) => /\d/.test(p),                         label: 'One number'                   },
+  { id: 'length',  test: (p) => p.length >= 8,   label: 'At least 8 characters' },
+  { id: 'upper',   test: (p) => /[A-Z]/.test(p), label: 'One uppercase letter'   },
+  { id: 'number',  test: (p) => /\d/.test(p),    label: 'One number'             },
 ]
 
 export default function Register() {
   const { user, loading: authLoading, signUp } = useAuth()
 
-  const [email,    setEmail]    = useState('')
-  const [password, setPassword] = useState('')
-  const [confirm,  setConfirm]  = useState('')
-  const [showPass, setShowPass] = useState(false)
-  const [error,    setError]    = useState('')
-  const [success,  setSuccess]  = useState(false)
-  const [loading,  setLoading]  = useState(false)
+  const [firstName,      setFirstName]      = useState('')
+  const [lastName,       setLastName]       = useState('')
+  const [phone,          setPhone]          = useState('')
+  const [email,          setEmail]          = useState('')
+  const [password,       setPassword]       = useState('')
+  const [confirm,        setConfirm]        = useState('')
+  const [showPass,       setShowPass]       = useState(false)
+  const [marketingEmail, setMarketingEmail] = useState(false)
+  const [marketingSms,   setMarketingSms]   = useState(false)
+  const [error,          setError]          = useState('')
+  const [success,        setSuccess]        = useState(false)
+  const [loading,        setLoading]        = useState(false)
 
   if (authLoading) return null
   if (user) return <Navigate to="/" replace />
@@ -29,10 +34,19 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    if (!passwordOk)  { setError('Password does not meet the requirements.'); return }
-    if (!confirmOk)   { setError('Passwords do not match.'); return }
+    if (!firstName.trim()) { setError('First name is required.'); return }
+    if (!lastName.trim())  { setError('Last name is required.'); return }
+    if (!phone.trim())     { setError('Phone number is required.'); return }
+    if (!passwordOk)       { setError('Password does not meet the requirements.'); return }
+    if (!confirmOk)        { setError('Passwords do not match.'); return }
     setLoading(true)
-    const { error } = await signUp(email, password)
+    const { error } = await signUp(email, password, {
+      firstName:     firstName.trim(),
+      lastName:      lastName.trim(),
+      phone:         phone.trim(),
+      marketingEmail,
+      marketingSms,
+    })
     if (error) setError(error.message)
     else setSuccess(true)
     setLoading(false)
@@ -59,6 +73,8 @@ export default function Register() {
       </div>
     )
   }
+
+  const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent placeholder:text-gray-400 transition"
 
   return (
     <div className="min-h-screen flex">
@@ -96,6 +112,45 @@ export default function Register() {
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            {/* First name + Last name */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-gray-700">First name</label>
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                  placeholder="Jane"
+                  required
+                  className={inputClass}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-gray-700">Last name</label>
+                <input
+                  type="text"
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
+                  placeholder="Smith"
+                  required
+                  className={inputClass}
+                />
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">Phone number</label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                placeholder="+44 7700 900000"
+                required
+                className={inputClass}
+              />
+            </div>
+
             {/* Email */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-gray-700">Email address</label>
@@ -105,7 +160,7 @@ export default function Register() {
                 onChange={e => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent placeholder:text-gray-400 transition"
+                className={inputClass}
               />
             </div>
 
@@ -119,7 +174,7 @@ export default function Register() {
                   onChange={e => setPassword(e.target.value)}
                   placeholder="Create a strong password"
                   required
-                  className="w-full px-4 py-3 pr-11 rounded-xl border border-gray-200 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent placeholder:text-gray-400 transition"
+                  className={`${inputClass} pr-11`}
                 />
                 <button
                   type="button"
@@ -130,7 +185,6 @@ export default function Register() {
                 </button>
               </div>
 
-              {/* Strength rules */}
               {password.length > 0 && (
                 <ul className="flex flex-col gap-1 mt-1">
                   {rules.map(r => (
@@ -143,7 +197,7 @@ export default function Register() {
               )}
             </div>
 
-            {/* Confirm */}
+            {/* Confirm password */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-gray-700">Confirm password</label>
               <input
@@ -161,6 +215,33 @@ export default function Register() {
               {confirm.length > 0 && !confirmOk && (
                 <p className="text-xs text-red-500">Passwords do not match</p>
               )}
+            </div>
+
+            {/* Marketing consent */}
+            <div className="flex flex-col gap-3 pt-1">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={marketingEmail}
+                  onChange={e => setMarketingEmail(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+                />
+                <span className="text-xs text-gray-600 leading-snug">
+                  I agree to receive marketing emails from BudgetPilot
+                </span>
+              </label>
+
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={marketingSms}
+                  onChange={e => setMarketingSms(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+                />
+                <span className="text-xs text-gray-600 leading-snug">
+                  I agree to receive SMS / phone marketing from BudgetPilot
+                </span>
+              </label>
             </div>
 
             {/* Error */}

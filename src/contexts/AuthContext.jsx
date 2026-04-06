@@ -97,12 +97,19 @@ export function AuthProvider({ children }) {
   }, [])
 
   // ── Auth actions ────────────────────────────────────────────
-  const signUp = (email, password, fullName) =>
+  const signUp = (email, password, { firstName, lastName, phone, marketingEmail, marketingSms } = {}) =>
     supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { full_name: fullName ?? '' },
+        data: {
+          full_name:               `${firstName ?? ''} ${lastName ?? ''}`.trim(),
+          first_name:              firstName              ?? '',
+          last_name:               lastName               ?? '',
+          phone:                   phone                  ?? '',
+          marketing_email_consent: marketingEmail         ?? false,
+          marketing_sms_consent:   marketingSms           ?? false,
+        },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     })

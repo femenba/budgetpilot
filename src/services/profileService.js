@@ -11,14 +11,20 @@ import { supabase } from '../lib/supabase'
  */
 export async function upsertProfile(user) {
   if (!user) return { error: null }
+  const meta = user.user_metadata ?? {}
   return supabase
     .from('profiles')
     .upsert(
       {
-        id:         user.id,
-        email:      user.email,
-        full_name:  user.user_metadata?.full_name  ?? null,
-        avatar_url: user.user_metadata?.avatar_url ?? null,
+        id:                      user.id,
+        email:                   user.email,
+        full_name:               meta.full_name               ?? null,
+        first_name:              meta.first_name              ?? null,
+        last_name:               meta.last_name               ?? null,
+        phone:                   meta.phone                   ?? null,
+        marketing_email_consent: meta.marketing_email_consent ?? false,
+        marketing_sms_consent:   meta.marketing_sms_consent   ?? false,
+        avatar_url:              meta.avatar_url              ?? null,
       },
       { onConflict: 'id', ignoreDuplicates: true }
     )

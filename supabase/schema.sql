@@ -16,14 +16,19 @@ create extension if not exists "pgcrypto";   -- gen_random_uuid() fallback
 --    One row per auth.users entry, created automatically on signup.
 -- ================================================================
 create table if not exists public.profiles (
-  id            uuid        primary key references auth.users(id) on delete cascade,
-  email         text        not null,
-  full_name     text,
-  avatar_url    text,
-  currency      char(3)     not null default 'USD',   -- ISO 4217
-  plan          text        not null default 'free' check (plan in ('free', 'pro')),
-  created_at    timestamptz not null default now(),
-  updated_at    timestamptz not null default now()
+  id                      uuid        primary key references auth.users(id) on delete cascade,
+  email                   text        not null,
+  full_name               text,
+  first_name              text,
+  last_name               text,
+  phone                   text,
+  marketing_email_consent boolean     not null default false,
+  marketing_sms_consent   boolean     not null default false,
+  avatar_url              text,
+  currency                char(3)     not null default 'USD',   -- ISO 4217
+  plan                    text        not null default 'free' check (plan in ('free', 'pro')),
+  created_at              timestamptz not null default now(),
+  updated_at              timestamptz not null default now()
 );
 
 comment on table  public.profiles             is 'Public profile data for each authenticated user.';
@@ -31,7 +36,12 @@ comment on column public.profiles.currency    is 'Preferred display currency (IS
 comment on column public.profiles.plan        is 'Subscription plan: free (default) or pro.';
 
 -- Migration for existing databases (safe to re-run)
-alter table public.profiles add column if not exists plan text not null default 'free' check (plan in ('free', 'pro'));
+alter table public.profiles add column if not exists plan                    text    not null default 'free' check (plan in ('free', 'pro'));
+alter table public.profiles add column if not exists first_name              text;
+alter table public.profiles add column if not exists last_name               text;
+alter table public.profiles add column if not exists phone                   text;
+alter table public.profiles add column if not exists marketing_email_consent boolean not null default false;
+alter table public.profiles add column if not exists marketing_sms_consent   boolean not null default false;
 
 -- Auto-create a profile row when a new user signs up
 create or replace function public.handle_new_user()
@@ -40,11 +50,16 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  insert into public.profiles (id, email, full_name, avatar_url)
+  insert into public.profiles (id, email, full_name, first_name, last_name, phone, marketing_email_consent, marketing_sms_consent, avatar_url)
   values (
     new.id,
     new.email,
     new.raw_user_meta_data->>'full_name',
+    new.raw_user_meta_data->>'first_name',
+    new.raw_user_meta_data->>'last_name',
+    new.raw_user_meta_data->>'phone',
+    coalesce((new.raw_user_meta_data->>'marketing_email_consent')::boolean, false),
+    coalesce((new.raw_user_meta_data->>'marketing_sms_consent')::boolean, false),
     new.raw_user_meta_data->>'avatar_url'
   )
   on conflict (id) do nothing;
