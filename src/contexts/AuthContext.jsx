@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { upsertProfile, fetchProfile, updateProfile } from '../services/profileService'
+import { upsertProfile, fetchProfile, updateProfile, updateLastSeen } from '../services/profileService'
 
 const AuthContext = createContext(null)
 
@@ -50,6 +50,7 @@ export function AuthProvider({ children }) {
       } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         try { await upsertProfile(u) } catch { /* non-fatal */ }
         await loadProfile(u?.id)
+        if (u) try { await updateLastSeen(u.id) } catch { /* non-fatal */ }
       } else if (event === 'SIGNED_OUT') {
         setProfile(null)
       } else if (event === 'USER_UPDATED') {
@@ -150,6 +151,15 @@ export function AuthProvider({ children }) {
       clearTimeout(timerId)
     }
   }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Keep last_seen_at fresh while the user has a session (every 2 minutes).
+  useEffect(() => {
+    if (!user) return
+    const iv = setInterval(() => {
+      updateLastSeen(user.id).catch(() => {})
+    }, 2 * 60 * 1000)
+    return () => clearInterval(iv)
+  }, [user])
 
   const updateUserProfile = async (updates) => {
     if (!user) return { error: new Error('Not authenticated') }

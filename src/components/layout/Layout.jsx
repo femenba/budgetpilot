@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, TrendingUp, TrendingDown,
   ArrowLeftRight, LogOut, CreditCard,
-  BarChart2, FileText, Target, MoreHorizontal, Zap, X,
+  BarChart2, FileText, Target, MoreHorizontal, Zap, X, Shield,
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -266,7 +266,8 @@ export function Layout({ children }) {
   const [showUpgradeMsg, setShowUpgradeMsg] = useState(false)
   const upgradeMsgTimer = useRef(null)
 
-  const isPro = profile?.plan === 'pro'
+  const isPro    = profile?.plan === 'pro'
+  const isAdmin  = profile?.is_admin === true
 
   const handleCurrencyChange = async (e) => {
     const next = e.target.value
@@ -316,6 +317,13 @@ export function Layout({ children }) {
             <>
               <p className="px-3 pt-4 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Pro</p>
               {NAV_PRO.map(item => <NavItem key={item.to} {...item} />)}
+            </>
+          )}
+
+          {isAdmin && (
+            <>
+              <div className="my-2 h-px bg-line" />
+              <NavItem to="/admin" icon={Shield} label="Admin" />
             </>
           )}
         </nav>

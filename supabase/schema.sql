@@ -260,7 +260,33 @@ on conflict (id) do update
 
 
 -- ================================================================
--- 8. BUDGETS
+-- 8. ADMIN — is_admin flag + last_seen_at heartbeat
+-- ================================================================
+alter table public.profiles add column if not exists is_admin     boolean     not null default false;
+alter table public.profiles add column if not exists last_seen_at timestamptz;
+
+-- Security-definer helper so admin RLS policies don't recurse into themselves.
+create or replace function public.is_current_user_admin()
+returns boolean
+language sql
+security definer set search_path = public
+as $$
+  select coalesce((select is_admin from public.profiles where id = auth.uid()), false);
+$$;
+
+-- Admins can read every profile row.
+drop policy if exists "profiles: admin read all"   on public.profiles;
+create policy "profiles: admin read all" on public.profiles
+  for select using (public.is_current_user_admin());
+
+-- Admins can update every profile row (e.g. toggle plan).
+drop policy if exists "profiles: admin update all" on public.profiles;
+create policy "profiles: admin update all" on public.profiles
+  for update using (public.is_current_user_admin());
+
+
+-- ================================================================
+-- 9. BUDGETS
 --    Monthly budget cap per category, per user.
 -- ================================================================
 create table if not exists public.budgets (

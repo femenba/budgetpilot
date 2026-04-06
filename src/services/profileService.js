@@ -50,3 +50,34 @@ export async function updateProfile(userId, updates) {
     .update(updates)
     .eq('id', userId)
 }
+
+/**
+ * Record that a user was recently active (used for online status).
+ */
+export async function updateLastSeen(userId) {
+  return supabase
+    .from('profiles')
+    .update({ last_seen_at: new Date().toISOString() })
+    .eq('id', userId)
+}
+
+/**
+ * Fetch all profiles — only succeeds when the caller is an admin
+ * (enforced via Supabase RLS + is_current_user_admin() helper).
+ */
+export async function fetchAllProfiles() {
+  return supabase
+    .from('profiles')
+    .select('id, email, first_name, last_name, phone, plan, is_admin, last_seen_at, created_at')
+    .order('created_at', { ascending: false })
+}
+
+/**
+ * Set a user's subscription plan — admin only (RLS enforced).
+ */
+export async function updateUserPlan(userId, plan) {
+  return supabase
+    .from('profiles')
+    .update({ plan })
+    .eq('id', userId)
+}
