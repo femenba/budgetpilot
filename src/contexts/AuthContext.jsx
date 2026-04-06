@@ -4,6 +4,8 @@ import { upsertProfile, fetchProfile, updateProfile } from '../services/profileS
 
 const AuthContext = createContext(null)
 
+const INACTIVITY_TIMEOUT = 20 * 60 * 1000 // 20 minutes
+
 export function AuthProvider({ children }) {
   const [user,    setUser]    = useState(null)
   const [profile, setProfile] = useState(null)
@@ -116,6 +118,31 @@ export function AuthProvider({ children }) {
     setProfile(null)
     await supabase.auth.signOut()
   }
+
+  // ── Inactivity logout ───────────────────────────────────────
+  // Starts a 20-minute countdown whenever there is a logged-in user.
+  // Any real user activity (click, touch, key, scroll) resets the timer.
+  // When it fires, signOut() clears state eagerly so ProtectedRoute
+  // redirects to /login without needing useNavigate here.
+  useEffect(() => {
+    if (!user) return
+
+    let timerId
+
+    const resetTimer = () => {
+      clearTimeout(timerId)
+      timerId = setTimeout(signOut, INACTIVITY_TIMEOUT)
+    }
+
+    const events = ['click', 'touchstart', 'keypress', 'scroll']
+    events.forEach(ev => window.addEventListener(ev, resetTimer, { passive: true }))
+    resetTimer() // start the clock immediately on login
+
+    return () => {
+      events.forEach(ev => window.removeEventListener(ev, resetTimer))
+      clearTimeout(timerId)
+    }
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateUserProfile = async (updates) => {
     if (!user) return { error: new Error('Not authenticated') }
