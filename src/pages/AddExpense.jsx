@@ -85,13 +85,13 @@ export default function AddExpense() {
         <div className="flex items-center gap-3 mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 rounded-xl hover:bg-gray-100 text-gray-500 transition-colors"
+            className="p-2 rounded-xl hover:bg-gray-100 text-gray-500 transition-all active:scale-95"
           >
             <ArrowLeft size={20} />
           </button>
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Add Expense</h1>
-            <p className="text-sm text-gray-500">Record a new expense entry</p>
+            <h1 className="text-2xl font-black text-gray-900 tracking-tight">Add Expense</h1>
+            <p className="text-sm text-gray-400 font-medium">Record a new expense entry</p>
           </div>
         </div>
 
@@ -301,7 +301,7 @@ export default function AddExpense() {
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 py-3.5 rounded-xl bg-red-500 hover:bg-red-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-bold transition-colors shadow-sm"
+                className="flex-1 py-3.5 rounded-xl bg-red-500 hover:bg-red-600 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-bold transition-all shadow-sm"
               >
                 {saving ? (
                   <span className="flex items-center justify-center gap-2">

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, ArrowRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, ArrowRight, Plus } from 'lucide-react'
 import { format } from 'date-fns'
 import { useAuth } from '../contexts/AuthContext'
 import { useTransactions } from '../hooks/useTransactions'
@@ -21,14 +21,21 @@ function MonthNav({ month, year, onChange }) {
 
   return (
     <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-xl px-1 py-1 shadow-sm">
-      <button onClick={prev} className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors">
-        <ChevronLeft size={16} />
+      <button
+        onClick={prev}
+        className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all active:scale-95"
+      >
+        <ChevronLeft size={15} strokeWidth={2.5} />
       </button>
-      <span className="text-sm font-semibold text-gray-700 px-2 min-w-[112px] text-center">
+      <span className="text-sm font-bold text-gray-800 px-2 min-w-[116px] text-center">
         {format(new Date(year, month - 1, 1), 'MMMM yyyy')}
       </span>
-      <button onClick={next} disabled={isNow} className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
-        <ChevronRight size={16} />
+      <button
+        onClick={next}
+        disabled={isNow}
+        className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        <ChevronRight size={15} strokeWidth={2.5} />
       </button>
     </div>
   )
@@ -68,27 +75,33 @@ export default function Dashboard() {
         {/* ── Page header ─────────────────────────────────── */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">
-              {greeting()}{firstName ? `, ${firstName}` : ''} 👋
+            <h1 className="text-2xl font-black text-gray-900 tracking-tight">
+              {greeting()}{firstName ? `, ${firstName}` : ''} <span className="not-italic">👋</span>
             </h1>
-            <p className="text-sm text-gray-500 mt-0.5">Here's your financial overview</p>
+            <p className="text-sm text-gray-400 font-medium mt-0.5">Here's your financial overview</p>
           </div>
           <MonthNav month={month} year={year} onChange={(m, y) => { setMonth(m); setYear(y) }} />
         </div>
 
         {/* ── Mobile quick actions ─────────────────────────── */}
         <div className="grid grid-cols-2 gap-3 sm:hidden">
-          <Link to="/income/add"  className="flex items-center gap-2 px-4 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-semibold text-sm transition-colors shadow-sm">
-            <TrendingUp size={18} /> Add Income
+          <Link
+            to="/income/add"
+            className="flex items-center justify-center gap-2 px-4 py-3.5 bg-green-500 hover:bg-green-600 active:scale-[0.97] text-white rounded-2xl font-bold text-sm transition-all shadow-sm"
+          >
+            <Plus size={16} strokeWidth={2.5} /> Add Income
           </Link>
-          <Link to="/expense/add" className="flex items-center gap-2 px-4 py-3.5 bg-red-500 hover:bg-red-600 text-white rounded-2xl font-semibold text-sm transition-colors shadow-sm">
-            <TrendingDown size={18} /> Add Expense
+          <Link
+            to="/expense/add"
+            className="flex items-center justify-center gap-2 px-4 py-3.5 bg-red-500 hover:bg-red-600 active:scale-[0.97] text-white rounded-2xl font-bold text-sm transition-all shadow-sm"
+          >
+            <Plus size={16} strokeWidth={2.5} /> Add Expense
           </Link>
         </div>
 
         {/* ── Error ────────────────────────────────────────── */}
         {error && (
-          <div className="px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+          <div className="px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700 font-medium">
             ⚠ {error}
           </div>
         )}
@@ -113,11 +126,14 @@ export default function Dashboard() {
         <SpendingByCategoryChart transactions={transactions} />
 
         {/* ── Recent transactions ──────────────────────────── */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-50">
-            <h2 className="font-semibold text-gray-800">Recent Transactions</h2>
-            <Link to="/transactions" className="flex items-center gap-1 text-sm text-brand-600 font-medium hover:underline">
-              View all <ArrowRight size={14} />
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-card overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+            <h2 className="font-bold text-gray-900">Recent Transactions</h2>
+            <Link
+              to="/transactions"
+              className="flex items-center gap-1 text-sm text-brand-600 font-semibold hover:text-brand-700 transition-colors"
+            >
+              View all <ArrowRight size={13} strokeWidth={2.5} />
             </Link>
           </div>
 
@@ -135,13 +151,13 @@ export default function Dashboard() {
               ))}
             </div>
           ) : recent.length === 0 ? (
-            <div className="flex flex-col items-center py-12 text-center px-5">
-              <span className="text-4xl mb-3">💸</span>
-              <p className="text-gray-500 text-sm font-medium">No transactions yet</p>
-              <p className="text-gray-400 text-xs mt-1">Add your first income or expense to get started</p>
+            <div className="flex flex-col items-center py-14 text-center px-5">
+              <span className="text-5xl mb-4">💸</span>
+              <p className="text-gray-700 text-sm font-bold">No transactions yet</p>
+              <p className="text-gray-400 text-xs mt-1 font-medium">Add your first income or expense to get started</p>
               <div className="flex gap-3 mt-5">
-                <Link to="/income/add"  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-xl transition-colors">+ Income</Link>
-                <Link to="/expense/add" className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-xl transition-colors">+ Expense</Link>
+                <Link to="/income/add"  className="px-4 py-2 bg-green-500 hover:bg-green-600 active:scale-95 text-white text-sm font-bold rounded-xl transition-all">+ Income</Link>
+                <Link to="/expense/add" className="px-4 py-2 bg-red-500 hover:bg-red-600 active:scale-95 text-white text-sm font-bold rounded-xl transition-all">+ Expense</Link>
               </div>
             </div>
           ) : (
