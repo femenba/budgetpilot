@@ -262,7 +262,7 @@ on conflict (id) do update
 -- ================================================================
 -- 8. ADMIN — is_admin flag + last_seen_at heartbeat
 -- ================================================================
-alter table public.profiles add column if not exists is_admin     boolean     not null default false;
+alter table public.profiles add column if not exists role         text        not null default 'user' check (role in ('user', 'admin'));
 alter table public.profiles add column if not exists last_seen_at timestamptz;
 
 -- Security-definer helper so admin RLS policies don't recurse into themselves.
@@ -271,7 +271,7 @@ returns boolean
 language sql
 security definer set search_path = public
 as $$
-  select coalesce((select is_admin from public.profiles where id = auth.uid()), false);
+  select coalesce((select role = 'admin' from public.profiles where id = auth.uid()), false);
 $$;
 
 -- Admins can read every profile row.
