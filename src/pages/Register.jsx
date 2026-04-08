@@ -273,6 +273,13 @@ export default function Register() {
               Sign in
             </Link>
           </p>
+
+          <p className="text-xs text-center text-gray-400 mt-4">
+            By creating an account you agree to our{' '}
+            <Link to="/terms" className="hover:text-gray-600 transition-colors">Terms</Link>
+            {' and '}
+            <Link to="/privacy" className="hover:text-gray-600 transition-colors">Privacy Policy</Link>
+          </p>
         </div>
       </div>
     </div>

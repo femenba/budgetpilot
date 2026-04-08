@@ -17,6 +17,8 @@ import Budgets        from './pages/Budgets'
 import AdminDashboard from './pages/AdminDashboard'
 import CheckoutSuccess from './pages/CheckoutSuccess'
 import CheckoutCancel  from './pages/CheckoutCancel'
+import Privacy         from './pages/Privacy'
+import Terms           from './pages/Terms'
 
 export default function App() {
   return (
@@ -56,6 +58,10 @@ export default function App() {
           {/* Stripe checkout callbacks — no auth required */}
           <Route path="/checkout/success" element={<CheckoutSuccess />} />
           <Route path="/checkout/cancel"  element={<CheckoutCancel />}  />
+
+          {/* Legal — public */}
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms"   element={<Terms />}   />
 
           {/* Admin-only */}
           <Route path="/admin" element={

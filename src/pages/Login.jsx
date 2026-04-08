@@ -145,6 +145,12 @@ export default function Login() {
               Create one free
             </Link>
           </p>
+
+          <p className="text-xs text-center text-gray-400 mt-6">
+            <Link to="/privacy" className="hover:text-gray-600 transition-colors">Privacy Policy</Link>
+            {' · '}
+            <Link to="/terms" className="hover:text-gray-600 transition-colors">Terms of Service</Link>
+          </p>
         </div>
       </div>
     </div>
