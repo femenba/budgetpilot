@@ -5,7 +5,10 @@
       "Bash(npm install:*)",
       "Skill(autoplan)",
       "Bash(git add:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(bash:*)"
     ]
   },
   "hooks": {

@@ -1,0 +1,97 @@
+<h2>How should the sidebar treat Pro features for Free users?</h2>
+<p class="subtitle">Currently Pro nav items are hidden entirely. Which approach fits better?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="A" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8; padding:16px; font-family:system-ui; border-radius:8px; min-height:220px;">
+      <div style="font-size:11px; font-weight:700; color:#999; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px;">Navigation</div>
+
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:#111;color:#fff;margin-bottom:3px;font-size:13px;font-weight:600;">
+        <span>⬛</span> Dashboard
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#888;margin-bottom:3px;font-size:13px;">
+        <span>⇄</span> Transactions
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#888;margin-bottom:12px;font-size:13px;">
+        <span>💳</span> Plans
+      </div>
+
+      <div style="font-size:11px;font-weight:700;color:#bbb;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Pro — Locked</div>
+
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#ccc;margin-bottom:3px;font-size:13px;opacity:.6;background:#f3f3f3;cursor:not-allowed;">
+        <span>📊</span> Insights <span style="margin-left:auto;font-size:10px;background:#e0e0e0;padding:2px 7px;border-radius:99px;color:#999;">Pro</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#ccc;margin-bottom:3px;font-size:13px;opacity:.6;background:#f3f3f3;cursor:not-allowed;">
+        <span>📄</span> Reports <span style="margin-left:auto;font-size:10px;background:#e0e0e0;padding:2px 7px;border-radius:99px;color:#999;">Pro</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#ccc;font-size:13px;opacity:.6;background:#f3f3f3;cursor:not-allowed;">
+        <span>🎯</span> Budgets <span style="margin-left:auto;font-size:10px;background:#e0e0e0;padding:2px 7px;border-radius:99px;color:#999;">Pro</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Visible but locked</h3>
+      <p>Pro items show in sidebar, greyed out with a "Pro" badge. Clicking navigates to upgrade gate. Free users always see what they're missing.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="B" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8; padding:16px; font-family:system-ui; border-radius:8px; min-height:220px;">
+      <div style="font-size:11px; font-weight:700; color:#999; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px;">Navigation</div>
+
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:#111;color:#fff;margin-bottom:3px;font-size:13px;font-weight:600;">
+        <span>⬛</span> Dashboard
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#888;margin-bottom:3px;font-size:13px;">
+        <span>⇄</span> Transactions
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#888;margin-bottom:16px;font-size:13px;">
+        <span>💳</span> Plans
+      </div>
+
+      <!-- Upgrade nudge CTA -->
+      <div style="background:#111;border-radius:10px;padding:12px;margin-bottom:6px;">
+        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:4px;">⚡ Upgrade to Pro</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:10px;line-height:1.5;">Unlock Insights, Reports &amp; Budgets</div>
+        <div style="background:#fff;color:#111;border-radius:6px;text-align:center;padding:6px 0;font-size:12px;font-weight:700;">View plans · £5/mo</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Upgrade CTA card in sidebar</h3>
+      <p>Pro items stay hidden. Instead, a compact dark upgrade card sits below the nav for free users. Clean, non-intrusive, still persistent.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="C" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8; padding:16px; font-family:system-ui; border-radius:8px; min-height:220px;">
+      <div style="font-size:11px; font-weight:700; color:#999; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px;">Navigation</div>
+
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:#111;color:#fff;margin-bottom:3px;font-size:13px;font-weight:600;">
+        <span>⬛</span> Dashboard
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#888;margin-bottom:3px;font-size:13px;">
+        <span>⇄</span> Transactions
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#888;margin-bottom:12px;font-size:13px;">
+        <span>💳</span> Plans
+      </div>
+
+      <div style="height:1px;background:#e5e5e5;margin-bottom:10px;"></div>
+
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#ccc;margin-bottom:3px;font-size:13px;opacity:.55;">
+        <span>📊</span> Insights
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#ccc;margin-bottom:3px;font-size:13px;opacity:.55;">
+        <span>📄</span> Reports
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:#ccc;font-size:13px;opacity:.55;">
+        <span>🎯</span> Budgets
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Dimmed items, no badge</h3>
+      <p>Pro items are visible but just dimmed (no badge, no label). Hovering reveals "Pro feature — upgrade to unlock". More subtle, less pushy.</p>
+    </div>
+  </div>
+
+</div>

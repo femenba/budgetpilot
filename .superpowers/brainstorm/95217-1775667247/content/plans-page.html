@@ -1,0 +1,108 @@
+<h2>How should the Plans page feel?</h2>
+<p class="subtitle">Current page is a simple 2-column card layout. Pick the direction that feels most premium.</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="A" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8;padding:16px;font-family:system-ui;border-radius:8px;min-height:280px;">
+      <!-- Current style, improved -->
+      <div style="font-size:14px;font-weight:800;color:#111;margin-bottom:2px;">Plans</div>
+      <div style="font-size:11px;color:#999;margin-bottom:14px;">You're on the <strong style="color:#333">Free</strong> plan.</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <!-- Free card -->
+        <div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:12px;">
+          <div style="font-size:13px;font-weight:800;color:#111;margin-bottom:6px;">Free</div>
+          <div style="font-size:20px;font-weight:900;color:#111;">£0<span style="font-size:11px;font-weight:500;color:#aaa;">/mo</span></div>
+          <div style="margin-top:10px;font-size:11px;color:#666;line-height:1.8;">✓ Track income &amp; expenses<br>✓ Monthly charts<br>✓ Default categories<br>✓ Transaction history</div>
+        </div>
+        <!-- Pro card -->
+        <div style="background:#fff;border:2px solid #6366f1;border-radius:12px;padding:12px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6366f1,#818cf8);"></div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+            <div style="font-size:13px;font-weight:800;color:#111;">Pro</div>
+            <span style="font-size:9px;background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:99px;font-weight:700;text-transform:uppercase;">Best value</span>
+          </div>
+          <div style="font-size:20px;font-weight:900;color:#111;">£5<span style="font-size:11px;font-weight:500;color:#aaa;">/mo</span></div>
+          <div style="margin-top:10px;font-size:11px;color:#666;line-height:1.8;">✓ Everything in Free<br>✓ Insights &amp; analytics<br>✓ Monthly reports<br>✓ Budget tracking<br>✓ Custom categories</div>
+          <div style="margin-top:10px;background:#6366f1;color:#fff;border-radius:7px;text-align:center;padding:7px 0;font-size:12px;font-weight:700;">Upgrade · £5/mo</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Refined current layout</h3>
+      <p>Keep the side-by-side card layout but sharpen the contrast, add a stronger CTA, and improve the feature list hierarchy.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="B" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8;padding:16px;font-family:system-ui;border-radius:8px;min-height:280px;">
+      <!-- Centred Pro-hero + Free underneath -->
+      <div style="font-size:14px;font-weight:800;color:#111;margin-bottom:2px;">Plans</div>
+      <div style="font-size:11px;color:#999;margin-bottom:14px;">Choose the plan that's right for you</div>
+
+      <!-- Hero Pro card -->
+      <div style="background:#111;border-radius:14px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:rgba(255,255,255,.04);border-radius:50%;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="font-size:13px;font-weight:800;color:#fff;">Pro</div>
+            <span style="font-size:9px;background:rgba(255,255,255,.15);color:#fff;padding:2px 7px;border-radius:99px;font-weight:700;text-transform:uppercase;">Recommended</span>
+          </div>
+          <div style="font-size:18px;font-weight:900;color:#fff;">£5<span style="font-size:11px;font-weight:500;color:rgba(255,255,255,.4);">/mo</span></div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:10px;">Insights · Reports · Budgets · Custom categories · Multi-currency</div>
+        <div style="background:#fff;color:#111;border-radius:8px;text-align:center;padding:8px 0;font-size:12px;font-weight:700;">Upgrade to Pro</div>
+      </div>
+
+      <!-- Free row -->
+      <div style="background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#111;">Free</div>
+          <div style="font-size:10px;color:#aaa;">Basic tracking · always free</div>
+        </div>
+        <div style="font-size:16px;font-weight:900;color:#111;">£0<span style="font-size:10px;color:#aaa;font-weight:500;">/mo</span></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Pro hero, Free secondary</h3>
+      <p>Pro takes the spotlight as a dark hero card. Free is demoted to a slim row below. Opinionated upsell-first hierarchy.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="C" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8;padding:16px;font-family:system-ui;border-radius:8px;min-height:280px;">
+      <!-- Feature comparison table -->
+      <div style="font-size:14px;font-weight:800;color:#111;margin-bottom:2px;">Plans</div>
+      <div style="font-size:11px;color:#999;margin-bottom:14px;">See what's included in each plan</div>
+
+      <div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:1fr 80px 80px;font-size:10px;font-weight:700;color:#999;text-transform:uppercase;padding:8px 12px;background:#fafafa;border-bottom:1px solid #f0f0f0;">
+          <div>Feature</div><div style="text-align:center;">Free</div><div style="text-align:center;color:#6366f1;">Pro</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 80px 80px;font-size:11px;padding:7px 12px;border-bottom:1px solid #f9f9f9;align-items:center;">
+          <div style="color:#555;">Transaction tracking</div><div style="text-align:center;color:#22c55e;">✓</div><div style="text-align:center;color:#22c55e;">✓</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 80px 80px;font-size:11px;padding:7px 12px;border-bottom:1px solid #f9f9f9;align-items:center;">
+          <div style="color:#555;">Monthly charts</div><div style="text-align:center;color:#22c55e;">✓</div><div style="text-align:center;color:#22c55e;">✓</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 80px 80px;font-size:11px;padding:7px 12px;border-bottom:1px solid #f9f9f9;align-items:center;background:#f9f7ff;">
+          <div style="color:#555;font-weight:600;">Insights &amp; analytics</div><div style="text-align:center;color:#ddd;">—</div><div style="text-align:center;color:#6366f1;">✓</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 80px 80px;font-size:11px;padding:7px 12px;border-bottom:1px solid #f9f9f9;align-items:center;background:#f9f7ff;">
+          <div style="color:#555;font-weight:600;">Budget tracking</div><div style="text-align:center;color:#ddd;">—</div><div style="text-align:center;color:#6366f1;">✓</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 80px 80px;font-size:11px;padding:7px 12px;align-items:center;background:#f9f7ff;">
+          <div style="color:#555;font-weight:600;">Monthly reports + CSV</div><div style="text-align:center;color:#ddd;">—</div><div style="text-align:center;color:#6366f1;">✓</div>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;background:#6366f1;color:#fff;border-radius:8px;text-align:center;padding:8px 0;font-size:12px;font-weight:700;">Upgrade to Pro · £5/mo</div>
+    </div>
+    <div class="card-body">
+      <h3>C — Feature comparison table</h3>
+      <p>Side-by-side feature matrix. Free vs Pro columns make gaps immediately obvious. More analytical, great for people who want to compare before committing.</p>
+    </div>
+  </div>
+
+</div>

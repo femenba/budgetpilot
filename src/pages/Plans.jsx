@@ -1,22 +1,15 @@
 import { useState } from 'react'
-import { Check, Zap, Star, Loader } from 'lucide-react'
+import { Check, Zap, Star, Loader, BarChart2, FileText, Target } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { Layout } from '../components/layout/Layout'
 
-const FREE_FEATURES = [
-  'Track income & expenses',
-  'Monthly overview & charts',
-  'Default categories',
-  'Transaction history',
-]
-
 const PRO_FEATURES = [
-  'Everything in Free',
-  'Multiple currencies',
-  'Custom categories',
-  'Insights & spending analytics',
-  'Monthly reports',
-  'Budget tracking',
+  { label: 'Everything in Free',               icon: Check   },
+  { label: 'Insights & spending analytics',    icon: BarChart2 },
+  { label: 'Monthly reports + CSV export',     icon: FileText  },
+  { label: 'Budget tracking per category',     icon: Target    },
+  { label: 'Custom categories',                icon: Check   },
+  { label: 'Multiple currencies',              icon: Check   },
 ]
 
 export default function Plans() {
@@ -49,119 +42,103 @@ export default function Plans() {
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="mb-8">
+      <div className="max-w-lg mx-auto px-4 py-8 flex flex-col gap-4">
+        <div className="mb-2">
           <h1 className="text-2xl font-black text-gray-900 tracking-tight mb-1">Plans</h1>
           <p className="text-sm text-gray-400 font-medium">
-            You're on the{' '}
-            <span className={`font-bold ${isPro ? 'text-brand-600' : 'text-gray-600'}`}>
-              {isPro ? 'Pro' : 'Free'}
-            </span>{' '}
-            plan.
+            Choose the plan that's right for you.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-4">
-          {/* Free card */}
-          <div className={`rounded-2xl border p-6 transition-all ${
-            !isPro
-              ? 'border-brand-200 bg-brand-50/40 shadow-card'
-              : 'border-gray-100 bg-white shadow-card'
-          }`}>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="font-black text-gray-900 text-lg">Free</h2>
-              {!isPro && (
-                <span className="text-[10px] font-bold bg-brand-100 text-brand-700 px-2.5 py-1 rounded-full uppercase tracking-wide">
-                  Current
-                </span>
-              )}
+        {/* ── Pro hero card (dark) ────────────────────────────── */}
+        <div className="rounded-2xl bg-gray-900 p-7 relative overflow-hidden shadow-xl">
+          {/* Accent bar */}
+          <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-gray-600 via-gray-400 to-gray-600 rounded-t-2xl" />
+
+          {/* Header */}
+          <div className="flex items-center justify-between mt-1 mb-5">
+            <div className="flex items-center gap-2.5">
+              <h2 className="font-black text-white text-xl tracking-tight">Pro</h2>
+              <div className="w-5 h-5 rounded-lg bg-white/10 flex items-center justify-center">
+                <Zap size={11} className="text-white" fill="currentColor" />
+              </div>
             </div>
-            <div className="mb-5">
-              <span className="text-3xl font-black text-gray-900">£0</span>
-              <span className="text-sm font-medium text-gray-400 ml-1">/mo</span>
-            </div>
-            <ul className="space-y-3">
-              {FREE_FEATURES.map(f => (
-                <li key={f} className="flex items-center gap-2.5 text-sm text-gray-600 font-medium">
-                  <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-                    <Check size={10} className="text-green-600" strokeWidth={3} />
-                  </div>
-                  {f}
-                </li>
-              ))}
-            </ul>
+            {isPro ? (
+              <span className="text-[10px] font-bold bg-white/10 text-white/80 px-2.5 py-1 rounded-full uppercase tracking-wide">
+                Current plan
+              </span>
+            ) : (
+              <span className="text-[10px] font-bold bg-white/10 text-white/70 px-2.5 py-1 rounded-full uppercase tracking-wide">
+                Recommended
+              </span>
+            )}
           </div>
 
-          {/* Pro card */}
-          <div className={`rounded-2xl border p-6 transition-all relative overflow-hidden ${
-            isPro
-              ? 'border-brand-200 bg-brand-50/40 shadow-card'
-              : 'border-brand-200 bg-white shadow-card-md'
-          }`}>
-            {/* Subtle gradient top bar */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-500 via-blue-500 to-brand-400 rounded-t-2xl" />
+          {/* Price */}
+          <div className="mb-1">
+            <span className="text-5xl font-black text-white tracking-tight">£5</span>
+            <span className="text-sm font-medium text-white/40 ml-1.5">/month</span>
+          </div>
+          <p className="text-xs text-white/30 font-medium mb-7">Cancel anytime · no commitments</p>
 
-            <div className="flex items-center justify-between mb-3 mt-1">
-              <div className="flex items-center gap-2">
-                <h2 className="font-black text-gray-900 text-lg">Pro</h2>
-                <div className="w-5 h-5 rounded-lg bg-brand-100 flex items-center justify-center">
-                  <Zap size={11} className="text-brand-600" fill="currentColor" />
+          {/* Features */}
+          <ul className="grid sm:grid-cols-2 gap-2.5 mb-7">
+            {PRO_FEATURES.map(({ label, icon: Icon }) => (
+              <li key={label} className="flex items-center gap-2.5 text-sm text-white/65 font-medium">
+                <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                  <Icon size={9} className="text-white/80" strokeWidth={3} />
                 </div>
-              </div>
-              {isPro ? (
-                <span className="text-[10px] font-bold bg-brand-100 text-brand-700 px-2.5 py-1 rounded-full uppercase tracking-wide">
-                  Current
-                </span>
-              ) : (
-                <span className="text-[10px] font-bold bg-yellow-100 text-yellow-700 px-2.5 py-1 rounded-full uppercase tracking-wide">
-                  Best value
+                {label}
+              </li>
+            ))}
+          </ul>
+
+          {!isPro && (
+            <>
+              <button
+                onClick={handleUpgrade}
+                disabled={upgrading}
+                className="w-full py-3.5 rounded-xl bg-white text-gray-900 text-sm font-bold hover:bg-gray-100 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-sm"
+              >
+                {upgrading ? (
+                  <Loader size={14} className="animate-spin" />
+                ) : (
+                  <Zap size={14} fill="currentColor" />
+                )}
+                {upgrading ? 'Redirecting…' : 'Upgrade to Pro · £5/mo'}
+              </button>
+              {upgradeError && (
+                <p className="mt-2 text-xs text-red-400 font-medium text-center">{upgradeError}</p>
+              )}
+            </>
+          )}
+
+          {isPro && (
+            <div className="flex items-center gap-2 px-3 py-2.5 bg-white/10 rounded-xl">
+              <Star size={14} className="text-white/60" fill="currentColor" />
+              <p className="text-xs font-semibold text-white/70">You're on Pro — enjoy all features!</p>
+            </div>
+          )}
+        </div>
+
+        {/* ── Free slim row ───────────────────────────────────── */}
+        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h2 className="font-black text-gray-900 text-base">Free</h2>
+              {!isPro && (
+                <span className="text-[9px] font-bold bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full uppercase tracking-wide">
+                  Current plan
                 </span>
               )}
             </div>
-
-            <div className="mb-1">
-              <span className="text-3xl font-black text-gray-900">£5</span>
-              <span className="text-sm font-medium text-gray-400 ml-1">/mo</span>
-            </div>
-            <p className="text-xs text-gray-400 font-medium mb-5">Cancel anytime · no commitments</p>
-
-            <ul className="space-y-3">
-              {PRO_FEATURES.map(f => (
-                <li key={f} className="flex items-center gap-2.5 text-sm text-gray-600 font-medium">
-                  <div className="w-4 h-4 rounded-full bg-brand-100 flex items-center justify-center shrink-0">
-                    <Check size={10} className="text-brand-600" strokeWidth={3} />
-                  </div>
-                  {f}
-                </li>
-              ))}
-            </ul>
-
-            {!isPro && (
-              <>
-                <button
-                  onClick={handleUpgrade}
-                  disabled={upgrading}
-                  className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-bold transition-all shadow-sm flex items-center justify-center gap-2"
-                >
-                  {upgrading ? (
-                    <Loader size={14} className="animate-spin" />
-                  ) : (
-                    <Zap size={14} fill="currentColor" />
-                  )}
-                  {upgrading ? 'Redirecting…' : 'Upgrade to Pro · £5/mo'}
-                </button>
-                {upgradeError && (
-                  <p className="mt-2 text-xs text-red-500 font-medium text-center">{upgradeError}</p>
-                )}
-              </>
-            )}
-
-            {isPro && (
-              <div className="mt-6 flex items-center gap-2 px-3 py-2.5 bg-brand-50 rounded-xl border border-brand-100">
-                <Star size={14} className="text-brand-600" fill="currentColor" />
-                <p className="text-xs font-semibold text-brand-700">You're on Pro — enjoy all features!</p>
-              </div>
-            )}
+            <p className="text-xs text-gray-400 leading-relaxed">
+              Transaction tracking · monthly charts · default categories
+            </p>
+          </div>
+          <div className="shrink-0 text-right">
+            <span className="text-2xl font-black text-gray-900">£0</span>
+            <span className="text-xs font-medium text-gray-400 ml-1">/mo</span>
           </div>
         </div>
       </div>

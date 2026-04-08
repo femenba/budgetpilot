@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, ArrowRight, Plus } from 'lucide-react'
+import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, ArrowRight, Plus, BarChart2, FileText, Target } from 'lucide-react'
 import { format } from 'date-fns'
 import { useAuth } from '../contexts/AuthContext'
 import { useTransactions } from '../hooks/useTransactions'
@@ -60,6 +60,8 @@ export default function Dashboard() {
     if (h < 18) return 'Good afternoon'
     return 'Good evening'
   }
+
+  const isPro = profile?.plan === 'pro'
 
   const firstName =
     profile?.full_name?.split(' ')[0] ??
@@ -124,6 +126,38 @@ export default function Dashboard() {
 
         {/* ── Spending by category (full-width) ────────────── */}
         <SpendingByCategoryChart transactions={transactions} />
+
+        {/* ── Pro feature teasers (free users only) ────────── */}
+        {!isPro && (
+          <div>
+            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Pro features</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { to: '/insights', Icon: BarChart2, label: 'Insights',  desc: 'Spending patterns & trends'  },
+                { to: '/reports',  Icon: FileText,  label: 'Reports',   desc: 'Monthly summaries & exports' },
+                { to: '/budgets',  Icon: Target,    label: 'Budgets',   desc: 'Set limits & track spend'    },
+              ].map(({ to, Icon, label, desc }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  className="group flex items-center gap-3.5 bg-white rounded-2xl p-4 border border-dashed border-gray-200 shadow-sm hover:border-gray-300 hover:shadow-md transition-all"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center shrink-0 group-hover:bg-gray-100 transition-colors">
+                    <Icon size={16} className="text-gray-300 group-hover:text-gray-400 transition-colors" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-sm font-semibold text-gray-400">{label}</p>
+                      <span className="text-[9px] font-bold bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded-full uppercase tracking-wide">Pro</span>
+                    </div>
+                    <p className="text-xs text-gray-300 mt-0.5 group-hover:text-gray-400 transition-colors">{desc}</p>
+                  </div>
+                  <ChevronRight size={13} className="text-gray-200 group-hover:text-gray-400 shrink-0 transition-colors" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ── Recent transactions ──────────────────────────── */}
         <div className="bg-surface rounded-2xl border border-line shadow-card overflow-hidden">

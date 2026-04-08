@@ -1,0 +1,77 @@
+<h2>Upgrade gate — what free users see when they click a locked feature</h2>
+<p class="subtitle">Currently: generic lock icon + one-line description. Which approach is more compelling?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="A" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8;padding:20px;font-family:system-ui;border-radius:8px;min-height:260px;display:flex;align-items:center;justify-content:center;">
+      <div style="text-align:center;max-width:280px;">
+        <div style="width:48px;height:48px;background:#f3f4f6;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:22px;">🔒</div>
+        <div style="font-size:15px;font-weight:800;color:#111;margin-bottom:6px;">Insights — Pro feature</div>
+        <div style="font-size:12px;color:#888;line-height:1.6;margin-bottom:16px;">
+          Understand where your money goes with savings rate tracking, top spending categories, and 6-month balance trends.
+        </div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;">
+          <span style="font-size:11px;background:#f3f4f6;color:#555;padding:4px 10px;border-radius:99px;">📊 Savings rate</span>
+          <span style="font-size:11px;background:#f3f4f6;color:#555;padding:4px 10px;border-radius:99px;">🏷 Top categories</span>
+          <span style="font-size:11px;background:#f3f4f6;color:#555;padding:4px 10px;border-radius:99px;">📈 6-month trend</span>
+        </div>
+        <div style="background:#111;color:#fff;border-radius:10px;padding:10px 20px;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;">
+          ⚡ Upgrade to Pro · £5/mo
+        </div>
+        <div style="font-size:11px;color:#bbb;margin-top:8px;">Cancel anytime · no commitments</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Feature-specific gate</h3>
+      <p>Gate copy is tailored to the feature the user tried to access. Lists the specific benefits of that feature with pill tags. More contextual and persuasive.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="B" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8;padding:16px;font-family:system-ui;border-radius:8px;min-height:260px;position:relative;overflow:hidden;">
+      <!-- Blurred preview behind -->
+      <div style="position:absolute;inset:0;background:#f0f0f0;filter:blur(0);display:flex;flex-direction:column;gap:8px;padding:16px;opacity:.25;">
+        <div style="height:60px;background:#e0e0e0;border-radius:10px;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="height:50px;background:#d0d0d0;border-radius:10px;"></div>
+          <div style="height:50px;background:#d0d0d0;border-radius:10px;"></div>
+        </div>
+        <div style="height:80px;background:#e0e0e0;border-radius:10px;"></div>
+      </div>
+      <!-- Overlay -->
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;min-height:220px;">
+        <div style="background:rgba(255,255,255,.95);border:1px solid #e5e5e5;border-radius:16px;padding:20px;text-align:center;max-width:200px;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+          <div style="font-size:20px;margin-bottom:8px;">🔒</div>
+          <div style="font-size:13px;font-weight:700;color:#111;margin-bottom:6px;">Unlock Insights</div>
+          <div style="font-size:11px;color:#888;margin-bottom:12px;line-height:1.5;">See your spending patterns on Pro</div>
+          <div style="background:#111;color:#fff;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;">Upgrade · £5/mo</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Blurred preview overlay</h3>
+      <p>The page content is visible but blurred behind a floating modal card. Creates curiosity — users can see the shape of what they're missing.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="C" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8;padding:16px;font-family:system-ui;border-radius:8px;min-height:260px;">
+      <!-- Full dark takeover -->
+      <div style="background:#111;border-radius:14px;padding:20px;text-align:center;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
+        <div style="width:44px;height:44px;background:rgba(255,255,255,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;">⚡</div>
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:4px;">This is a Pro feature</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.6;max-width:200px;margin:0 auto;">Upgrade to unlock Insights, Reports, Budgets and more — all for £5/mo.</div>
+        </div>
+        <div style="background:#fff;color:#111;border-radius:10px;padding:10px 24px;font-size:13px;font-weight:700;">View plans</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.25);">Cancel anytime</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Dark full-panel gate</h3>
+      <p>The entire content area turns dark with a premium Zap icon and a white CTA. Consistent with the mobile More sheet upgrade card. Bold, on-brand.</p>
+    </div>
+  </div>
+
+</div>

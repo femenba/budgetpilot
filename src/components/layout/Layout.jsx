@@ -30,6 +30,27 @@ const NAV_MOBILE_CORE = [
   { to: '/expense/add',             icon: TrendingDown,    label: 'Expense',     accent: 'red'     },
 ]
 
+function LockedNavItem({ to, icon: Icon, label }) {
+  return (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
+          isActive ? 'bg-canvas text-dim' : 'text-gray-300 hover:text-dim hover:bg-canvas'
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <Icon size={17} className={isActive ? 'text-gray-400' : 'text-gray-300'} strokeWidth={2} />
+          <span>{label}</span>
+          <span className="ml-auto text-[9px] font-bold bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded-full uppercase tracking-wide">Pro</span>
+        </>
+      )}
+    </NavLink>
+  )
+}
+
 function NavItem({ to, end, icon: Icon, label, accent, onClick }) {
   const accentActive = accent === 'emerald'
     ? 'bg-green-50 text-green-700'
@@ -217,18 +238,30 @@ function MobileMoreSheet({ open, onClose, isPro, isAdmin }) {
               </NavLink>
             </div>
 
-            {/* Locked pro links */}
-            <div className="flex flex-col gap-1 opacity-35 pointer-events-none">
+            {/* Locked pro links — clickable, navigate to blurred gate */}
+            <div className="flex flex-col gap-1">
               {proLinks.map(({ to, icon: Icon, label, sub }) => (
-                <div key={to} className="flex items-center gap-4 px-4 py-3.5 rounded-2xl">
+                <NavLink
+                  key={to}
+                  to={to}
+                  onClick={onClose}
+                  className={({ isActive }) =>
+                    `flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-colors opacity-50 hover:opacity-70 ${
+                      isActive ? 'bg-canvas' : 'hover:bg-canvas'
+                    }`
+                  }
+                >
                   <div className="w-10 h-10 rounded-xl bg-line flex items-center justify-center shrink-0">
                     <Icon size={18} className="text-dim" />
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-dim">{label}</p>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-dim">{label}</p>
+                      <span className="text-[9px] font-bold bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded-full uppercase tracking-wide">Pro</span>
+                    </div>
                     <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
                   </div>
-                </div>
+                </NavLink>
               ))}
             </div>
             {isAdmin && (
@@ -359,12 +392,13 @@ export function Layout({ children }) {
 
           <NavItem to="/plans" icon={CreditCard} label="Plans" />
 
-          {isPro && (
-            <>
-              <p className="px-3 pt-4 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Pro</p>
-              {NAV_PRO.map(item => <NavItem key={item.to} {...item} />)}
-            </>
-          )}
+          <>
+            <p className="px-3 pt-4 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Pro</p>
+            {isPro
+              ? NAV_PRO.map(item => <NavItem key={item.to} {...item} />)
+              : NAV_PRO.map(item => <LockedNavItem key={item.to} {...item} />)
+            }
+          </>
 
           {isAdmin && (
             <>

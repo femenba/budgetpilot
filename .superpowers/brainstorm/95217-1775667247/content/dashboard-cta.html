@@ -1,0 +1,112 @@
+<h2>Dashboard upgrade nudges for free users</h2>
+<p class="subtitle">How should the Dashboard hint at Pro without being intrusive? (These only show for free users)</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="A" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8;padding:14px;font-family:system-ui;border-radius:8px;min-height:270px;">
+      <div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Dashboard layout</div>
+
+      <!-- Summary cards placeholder -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
+        <div style="height:44px;background:#e8e8e8;border-radius:8px;"></div>
+        <div style="height:44px;background:#e8e8e8;border-radius:8px;"></div>
+        <div style="height:44px;background:#e8e8e8;border-radius:8px;"></div>
+      </div>
+
+      <!-- Chart placeholder -->
+      <div style="height:60px;background:#e8e8e8;border-radius:8px;margin-bottom:8px;"></div>
+
+      <!-- Pro teaser section -->
+      <div style="background:#111;border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:2px;">⚡ Unlock Pro features</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.4;">Insights · Reports · Budgets</div>
+        </div>
+        <div style="background:#fff;color:#111;border-radius:7px;padding:5px 12px;font-size:11px;font-weight:700;white-space:nowrap;">£5/mo →</div>
+      </div>
+
+      <!-- Transactions placeholder -->
+      <div style="height:50px;background:#e8e8e8;border-radius:8px;"></div>
+    </div>
+    <div class="card-body">
+      <h3>A — Inline dark banner</h3>
+      <p>A compact dark strip between the chart and transactions sections. Persistent but small. Easy to ignore after first glance, but always visible.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="B" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8;padding:14px;font-family:system-ui;border-radius:8px;min-height:270px;">
+      <div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Dashboard layout</div>
+
+      <!-- Summary cards placeholder -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
+        <div style="height:44px;background:#e8e8e8;border-radius:8px;"></div>
+        <div style="height:44px;background:#e8e8e8;border-radius:8px;"></div>
+        <div style="height:44px;background:#e8e8e8;border-radius:8px;"></div>
+      </div>
+
+      <!-- Chart placeholder -->
+      <div style="height:60px;background:#e8e8e8;border-radius:8px;margin-bottom:8px;"></div>
+
+      <!-- Teaser cards row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
+        <div style="background:#fff;border:1px dashed #d0d0d0;border-radius:8px;padding:8px;text-align:center;opacity:.7;">
+          <div style="font-size:16px;margin-bottom:2px;">📊</div>
+          <div style="font-size:10px;font-weight:600;color:#999;">Insights</div>
+          <div style="font-size:9px;color:#bbb;margin-top:2px;">Pro</div>
+        </div>
+        <div style="background:#fff;border:1px dashed #d0d0d0;border-radius:8px;padding:8px;text-align:center;opacity:.7;">
+          <div style="font-size:16px;margin-bottom:2px;">📄</div>
+          <div style="font-size:10px;font-weight:600;color:#999;">Reports</div>
+          <div style="font-size:9px;color:#bbb;margin-top:2px;">Pro</div>
+        </div>
+        <div style="background:#fff;border:1px dashed #d0d0d0;border-radius:8px;padding:8px;text-align:center;opacity:.7;">
+          <div style="font-size:16px;margin-bottom:2px;">🎯</div>
+          <div style="font-size:10px;font-weight:600;color:#999;">Budgets</div>
+          <div style="font-size:9px;color:#bbb;margin-top:2px;">Pro</div>
+        </div>
+      </div>
+
+      <!-- Transactions placeholder -->
+      <div style="height:50px;background:#e8e8e8;border-radius:8px;"></div>
+    </div>
+    <div class="card-body">
+      <h3>B — Ghost feature cards</h3>
+      <p>3 dashed-border ghost cards for Insights, Reports, Budgets sit in the dashboard layout. Clicking any opens the blurred gate. Visual gap in the page makes the missing features tangible.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="C" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8f8f8;padding:14px;font-family:system-ui;border-radius:8px;min-height:270px;">
+      <div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Dashboard layout</div>
+
+      <!-- Summary cards placeholder -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
+        <div style="height:44px;background:#e8e8e8;border-radius:8px;"></div>
+        <div style="height:44px;background:#e8e8e8;border-radius:8px;"></div>
+        <div style="height:44px;background:#e8e8e8;border-radius:8px;"></div>
+      </div>
+
+      <!-- Chart placeholder -->
+      <div style="height:60px;background:#e8e8e8;border-radius:8px;margin-bottom:8px;"></div>
+      <!-- Transactions placeholder -->
+      <div style="height:50px;background:#e8e8e8;border-radius:8px;margin-bottom:8px;"></div>
+
+      <!-- Bottom CTA card -->
+      <div style="background:linear-gradient(135deg,#f9f9f9,#f3f3f3);border:1px solid #e5e5e5;border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;background:#111;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">⚡</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:700;color:#111;margin-bottom:2px;">Get more from BudgetPilot</div>
+          <div style="font-size:10px;color:#888;line-height:1.4;">Upgrade to Pro for Insights, Reports &amp; Budget tracking</div>
+        </div>
+        <div style="background:#111;color:#fff;border-radius:7px;padding:6px 10px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;">Upgrade</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Bottom CTA card</h3>
+      <p>A single upgrade card at the very bottom of the Dashboard. Out of the way but still present. Clean, low-pressure — you see it when you scroll down.</p>
+    </div>
+  </div>
+
+</div>
