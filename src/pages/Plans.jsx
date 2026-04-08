@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Check, Zap, Star, Loader, BarChart2, FileText, Target } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { Layout } from '../components/layout/Layout'
+import { isNative } from '../lib/platform'
 
 const PRO_FEATURES = [
   { label: 'Everything in Free',               icon: Check   },
@@ -15,6 +16,7 @@ const PRO_FEATURES = [
 export default function Plans() {
   const { user, profile } = useAuth()
   const isPro = profile?.plan === 'pro'
+  const onNative = isNative()
   const [upgrading, setUpgrading] = useState(false)
   const [upgradeError, setUpgradeError] = useState(null)
 
@@ -93,7 +95,7 @@ export default function Plans() {
             ))}
           </ul>
 
-          {!isPro && (
+          {!isPro && !onNative && (
             <>
               <button
                 onClick={handleUpgrade}
@@ -111,6 +113,15 @@ export default function Plans() {
                 <p className="mt-2 text-xs text-red-400 font-medium text-center">{upgradeError}</p>
               )}
             </>
+          )}
+
+          {!isPro && onNative && (
+            <div className="px-4 py-3 bg-white/5 rounded-xl">
+              <p className="text-sm text-white/60 text-center leading-relaxed">
+                Manage your subscription at{' '}
+                <span className="text-white/80 font-semibold">budgetpilotapp.com</span>
+              </p>
+            </div>
           )}
 
           {isPro && (

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { upsertProfile, fetchProfile, updateProfile, updateLastSeen } from '../services/profileService'
+import { isNative } from '../lib/platform'
 
 const AuthContext = createContext(null)
 
@@ -111,7 +112,9 @@ export function AuthProvider({ children }) {
           marketing_email_consent: marketingEmail         ?? false,
           marketing_sms_consent:   marketingSms           ?? false,
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: isNative()
+            ? 'https://budgetpilotapp.com/auth/callback'
+            : `${window.location.origin}/auth/callback`,
       },
     })
 

@@ -2,6 +2,7 @@ import { Navigate, Link, useLocation } from 'react-router-dom'
 import { Check, BarChart2, FileText, Target, Zap } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { Layout } from './Layout'
+import { isNative } from '../../lib/platform'
 
 const FEATURE_INFO = {
   '/insights': {
@@ -46,6 +47,7 @@ export function ProRoute({ children }) {
   if (profile?.plan !== 'pro') {
     const feature = FEATURE_INFO[location.pathname] ?? DEFAULT_FEATURE
     const { Icon, title, desc, bullets } = feature
+    const onNative = isNative()
 
     return (
       <Layout>
@@ -102,14 +104,23 @@ export function ProRoute({ children }) {
                   </li>
                 ))}
               </ul>
-              <Link
-                to="/plans"
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gray-900 text-white text-sm font-bold hover:bg-gray-800 active:scale-[0.98] transition-all"
-              >
-                <Zap size={14} fill="currentColor" />
-                Upgrade to Pro · £5/mo
-              </Link>
-              <p className="text-xs text-gray-400 mt-3">Cancel anytime · no commitments</p>
+              {onNative ? (
+                <p className="text-sm text-gray-500 text-center mt-2 leading-relaxed">
+                  Manage your subscription at{' '}
+                  <span className="font-semibold text-gray-700">budgetpilotapp.com</span>
+                </p>
+              ) : (
+                <>
+                  <Link
+                    to="/plans"
+                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gray-900 text-white text-sm font-bold hover:bg-gray-800 active:scale-[0.98] transition-all"
+                  >
+                    <Zap size={14} fill="currentColor" />
+                    Upgrade to Pro · £5/mo
+                  </Link>
+                  <p className="text-xs text-gray-400 mt-3">Cancel anytime · no commitments</p>
+                </>
+              )}
             </div>
           </div>
         </div>
