@@ -90,7 +90,7 @@ function MobileNavItem({ to, end, icon: Icon, label, accent }) {
 }
 
 // ── Mobile "More" sheet ───────────────────────────────────────────
-function MobileMoreSheet({ open, onClose, isPro }) {
+function MobileMoreSheet({ open, onClose, isPro, isAdmin }) {
   useEffect(() => {
     if (!open) return
     const handler = (e) => { if (e.key === 'Escape') onClose() }
@@ -170,6 +170,29 @@ function MobileMoreSheet({ open, onClose, isPro }) {
                 <p className="text-xs text-dim mt-0.5">Manage your subscription</p>
               </div>
             </NavLink>
+            {isAdmin && (
+              <NavLink
+                to="/admin"
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-colors mt-1 border-t border-line pt-3 ${
+                    isActive ? 'bg-canvas' : 'hover:bg-canvas'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isActive ? 'bg-ink' : 'bg-line'}`}>
+                      <Shield size={18} className={isActive ? 'text-white' : 'text-dim'} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className={`text-sm font-semibold ${isActive ? 'text-ink' : 'text-gray-800'}`}>Admin</p>
+                      <p className="text-xs text-dim mt-0.5">User management & settings</p>
+                    </div>
+                  </>
+                )}
+              </NavLink>
+            )}
           </div>
         ) : (
           <div className="flex flex-col gap-3">
@@ -208,6 +231,29 @@ function MobileMoreSheet({ open, onClose, isPro }) {
                 </div>
               ))}
             </div>
+            {isAdmin && (
+              <NavLink
+                to="/admin"
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-colors border-t border-line pt-3 ${
+                    isActive ? 'bg-canvas' : 'hover:bg-canvas'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isActive ? 'bg-ink' : 'bg-line'}`}>
+                      <Shield size={18} className={isActive ? 'text-white' : 'text-dim'} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className={`text-sm font-semibold ${isActive ? 'text-ink' : 'text-gray-800'}`}>Admin</p>
+                      <p className="text-xs text-dim mt-0.5">User management & settings</p>
+                    </div>
+                  </>
+                )}
+              </NavLink>
+            )}
           </div>
         )}
       </div>
@@ -441,7 +487,7 @@ export function Layout({ children }) {
         </button>
       </nav>
 
-      <MobileMoreSheet open={showMore} onClose={() => setShowMore(false)} isPro={isPro} />
+      <MobileMoreSheet open={showMore} onClose={() => setShowMore(false)} isPro={isPro} isAdmin={isAdmin} />
     </div>
   )
 }
