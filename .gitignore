@@ -25,3 +25,21 @@ npm-debug.log*
 
 # Vite
 *.local
+
+# capacitor-assets generated WebP output (root icons/ dir)
+/icons/
+
+# vite-plugin-pwa generated manifest
+public/manifest.webmanifest
+
+# iOS — CocoaPods dependencies (like node_modules)
+ios/App/Pods/
+
+# iOS — build artifacts and user-specific Xcode state
+ios/App/build/
+ios/App/App.xcworkspace/xcuserdata/
+ios/App/App.xcodeproj/xcuserdata/
+ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Claude Code local settings
+.claude/settings.local.json

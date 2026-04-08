@@ -1,5 +1,6 @@
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { sendProWelcomeEmail } from './emails/pro-welcome.js'
 
 // Disable Vercel's default body parser so we can read the raw bytes
 // needed for Stripe signature verification.
@@ -69,23 +70,39 @@ export default async function handler(req, res) {
       // Prefer looking up by stripe_customer_id (idempotent across renewals).
       let userId = null
 
+      // profile holds current plan + contact details — fetched once for both
+      // the upgrade logic and the welcome email decision.
+      let existingPlan = null
+      let profileEmail = null
+      let firstName = null
+
       if (customerId) {
         const { data } = await supabase
           .from('profiles')
-          .select('id')
+          .select('id, plan, email, first_name')
           .eq('stripe_customer_id', customerId)
           .maybeSingle()
-        if (data) userId = data.id
+        if (data) {
+          userId = data.id
+          existingPlan = data.plan
+          profileEmail = data.email
+          firstName = data.first_name
+        }
       }
 
       // Fall back to email for the first payment (customer_id not yet stored).
       if (!userId && customerEmail) {
         const { data } = await supabase
           .from('profiles')
-          .select('id')
+          .select('id, plan, email, first_name')
           .eq('email', customerEmail)
           .maybeSingle()
-        if (data) userId = data.id
+        if (data) {
+          userId = data.id
+          existingPlan = data.plan
+          profileEmail = data.email
+          firstName = data.first_name
+        }
       }
 
       if (!userId) {
@@ -112,6 +129,21 @@ export default async function handler(req, res) {
       }
 
       console.log(`[stripe-webhook] upgraded user to pro via ${event.type}:`, userId)
+
+      // Send welcome email only on the first upgrade (free → pro).
+      // If the plan was already 'pro' this is a renewal — skip to avoid duplicates.
+      if (existingPlan !== 'pro') {
+        const recipient = profileEmail || customerEmail
+        if (recipient) {
+          try {
+            await sendProWelcomeEmail(recipient, firstName)
+            console.log('[stripe-webhook] pro welcome email sent to:', recipient)
+          } catch (emailErr) {
+            // Non-fatal — the upgrade succeeded; log and continue.
+            console.error('[stripe-webhook] welcome email failed:', emailErr.message)
+          }
+        }
+      }
     }
 
     if (event.type === 'customer.subscription.deleted') {
