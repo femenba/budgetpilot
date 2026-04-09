@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from 'react'
 import { Users, Wifi, WifiOff, Zap, CalendarPlus, Search, Shield } from 'lucide-react'
 import { formatDistanceToNow, subDays } from 'date-fns'
 import { Layout } from '../components/layout/Layout'
-import { fetchAllProfiles, updateUserPlan } from '../services/profileService'
+import { fetchAllProfiles } from '../services/profileService'
+import { supabase } from '../lib/supabase'
 
 const ONLINE_MS = 5 * 60 * 1000 // 5 minutes
 
@@ -48,7 +49,18 @@ export default function AdminDashboard() {
 
   const handlePlanChange = async (userId, newPlan) => {
     setUpdating(userId)
-    await updateUserPlan(userId, newPlan)
+    const { data: { session } } = await supabase.auth.getSession()
+    await fetch('/api/admin-upgrade', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({
+        userId: userId,
+        newPlan: newPlan
+      })
+    })
     setProfiles(prev => prev.map(p => p.id === userId ? { ...p, plan: newPlan } : p))
     setUpdating(null)
   }

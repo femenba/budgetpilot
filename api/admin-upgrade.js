@@ -34,9 +34,10 @@ export default async function handler(req, res) {
     return res.status(403).json({ error: 'Forbidden' })
   }
 
-  const { userId, plan } = req.body ?? {}
+  const { userId, newPlan } = req.body ?? {}
+  const plan = newPlan
   if (!userId || !plan) {
-    return res.status(400).json({ error: 'Missing userId or plan' })
+    return res.status(400).json({ error: 'Missing userId or newPlan' })
   }
 
   // Fetch the target user's current state before updating.
