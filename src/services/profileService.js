@@ -73,11 +73,27 @@ export async function fetchAllProfiles() {
 }
 
 /**
- * Set a user's subscription plan — admin only (RLS enforced).
+ * Set a user's subscription plan — admin only.
+ * Routes through the server-side /api/admin-upgrade endpoint so that
+ * a Pro welcome email can be sent when upgrading free → pro.
  */
 export async function updateUserPlan(userId, plan) {
-  return supabase
-    .from('profiles')
-    .update({ plan })
-    .eq('id', userId)
+  const { data: { session } } = await supabase.auth.getSession()
+  const token = session?.access_token
+
+  const res = await fetch('/api/admin-upgrade', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ userId, plan }),
+  })
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    return { data: null, error: { message: body.error ?? 'Failed to update plan' } }
+  }
+
+  return { data: null, error: null }
 }

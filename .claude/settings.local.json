@@ -8,7 +8,12 @@
       "Bash(git rm:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(node -e \"require\\('@capacitor/core'\\); console.log\\('ok'\\)\")",
+      "Bash(npx capacitor-assets:*)",
+      "Bash(npx:*)",
+      "Bash(python3 -c ':*)",
+      "Bash(node:*)"
     ]
   },
   "hooks": {
