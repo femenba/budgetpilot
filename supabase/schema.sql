@@ -269,8 +269,9 @@ alter table public.profiles add column if not exists stripe_subscription_id  tex
 alter table public.profiles add column if not exists subscription_status     text;
 alter table public.profiles add column if not exists subscription_renewal_at timestamptz;
 
--- Set your own account as Pro + Admin (replace with your actual user UUID):
--- update public.profiles set plan = 'pro', role = 'admin' where email = 'femenbaa@gmail.com';
+-- Admin account setup (run once after deploying):
+-- update public.profiles set plan = 'pro', role = 'admin' where email = 'admin@budgetpilotapp.com';
+-- update public.profiles set role = 'user' where email = 'femenbaa@gmail.com';
 
 -- Security-definer helper so admin RLS policies don't recurse into themselves.
 create or replace function public.is_current_user_admin()
