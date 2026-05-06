@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { endOfMonth, format as fmtDate } from 'date-fns'
 import { useAuth } from '../contexts/AuthContext'
 import {
@@ -10,6 +10,8 @@ import {
   updateExpense,
   deleteIncome,
   deleteExpense,
+  backfillRecurringGroupIds,
+  generateRecurringForMonth,
 } from '../services/transactionService'
 
 function dateRange(month, year) {
@@ -27,6 +29,10 @@ export function useTransactions(month, year) {
   const [loading,  setLoading]  = useState(true)
   const [error,    setError]    = useState(null)
 
+  // Backfill runs once per mounted instance / user — assigns group_ids to
+  // any existing recurring rows that predate the recurring_group_id column.
+  const backfilledRef = useRef(false)
+
   const { from, to } = dateRange(month, year)
 
   // ── Fetch ──────────────────────────────────────────────────────
@@ -34,6 +40,15 @@ export function useTransactions(month, year) {
     if (!user) return
     setLoading(true)
     setError(null)
+
+    // One-time backfill per session: gives group_ids to old recurring rows
+    if (!backfilledRef.current) {
+      await backfillRecurringGroupIds(user.id)
+      backfilledRef.current = true
+    }
+
+    // Generate any missing recurring entries for this month from past templates
+    await generateRecurringForMonth(user.id, month, year)
 
     const [incRes, expRes] = await Promise.all([
       fetchIncomes(user.id, from, to),
@@ -47,7 +62,7 @@ export function useTransactions(month, year) {
       setExpenses(expRes.data.map(r => ({ ...r, type: 'expense' })))
     }
     setLoading(false)
-  }, [user, from, to])
+  }, [user, from, to, month, year]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { fetchAll() }, [fetchAll])
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Users, Wifi, WifiOff, Zap, CalendarPlus, Search, Shield, TrendingUp, AlertCircle } from 'lucide-react'
+import { Users, Wifi, WifiOff, Zap, CalendarPlus, Search, Shield, TrendingUp, AlertCircle, RotateCcw, Loader } from 'lucide-react'
 import { formatDistanceToNow, subDays } from 'date-fns'
 import { Layout } from '../components/layout/Layout'
 import { fetchAllProfiles } from '../services/profileService'
@@ -65,6 +65,10 @@ export default function AdminDashboard() {
   const [planFilter,  setPlanFilter]  = useState('all')
   const [statusFilter, setStatusFilter] = useState('all')
   const [updating,    setUpdating]    = useState(null)
+  const [genMonth,    setGenMonth]    = useState(new Date().getMonth() + 1)
+  const [genYear,     setGenYear]     = useState(new Date().getFullYear())
+  const [generating,  setGenerating]  = useState(false)
+  const [genResult,   setGenResult]   = useState(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -74,6 +78,29 @@ export default function AdminDashboard() {
   }, [])
 
   useEffect(() => { load() }, [load])
+
+  const handleGenerateRecurring = async () => {
+    setGenerating(true)
+    setGenResult(null)
+    const { data: { session } } = await supabase.auth.getSession()
+    try {
+      const res = await fetch('/api/generate-recurring', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ month: genMonth, year: genYear }),
+      })
+      const data = await res.json()
+      setGenResult(data.ok
+        ? `Done: ${data.generated} entries generated, ${data.backfilled} rows backfilled across ${data.users} users.`
+        : `Error: ${data.error}`)
+    } catch (err) {
+      setGenResult(`Network error: ${err.message}`)
+    }
+    setGenerating(false)
+  }
 
   const handlePlanChange = async (userId, newPlan) => {
     setUpdating(userId)
@@ -122,6 +149,45 @@ export default function AdminDashboard() {
             <h1 className="text-xl font-bold text-ink tracking-tight">Admin</h1>
             <p className="text-xs text-dim">User management &amp; billing overview</p>
           </div>
+        </div>
+
+        {/* Generate Recurring */}
+        <div className="bg-surface rounded-2xl border border-line p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
+            <RotateCcw size={15} className="text-dim" />
+            <span className="text-sm font-semibold text-ink">Generate recurring transactions</span>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <select
+              value={genMonth}
+              onChange={e => setGenMonth(Number(e.target.value))}
+              className="px-3 py-1.5 rounded-xl border border-line bg-canvas text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ink"
+            >
+              {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m, i) => (
+                <option key={m} value={i + 1}>{m}</option>
+              ))}
+            </select>
+            <input
+              type="number"
+              value={genYear}
+              onChange={e => setGenYear(Number(e.target.value))}
+              min="2020" max="2030"
+              className="w-20 px-3 py-1.5 rounded-xl border border-line bg-canvas text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ink"
+            />
+            <button
+              onClick={handleGenerateRecurring}
+              disabled={generating}
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-ink text-white text-sm font-semibold hover:bg-gray-800 disabled:opacity-50 transition-colors"
+            >
+              {generating ? <Loader size={13} className="animate-spin" /> : <RotateCcw size={13} />}
+              {generating ? 'Running…' : 'Run'}
+            </button>
+          </div>
+          {genResult && (
+            <p className={`text-xs font-medium mt-1 sm:mt-0 ${genResult.startsWith('Done') ? 'text-green-700' : 'text-red-600'}`}>
+              {genResult}
+            </p>
+          )}
         </div>
 
         {/* Stats */}

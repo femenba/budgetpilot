@@ -293,7 +293,24 @@ create policy "profiles: admin update all" on public.profiles
 
 
 -- ================================================================
--- 9. BUDGETS
+-- 9. RECURRING TRANSACTION GROUPS
+--    recurring_group_id links all monthly copies of the same recurring item.
+--    The partial unique index prevents duplicate generation (idempotent inserts).
+-- ================================================================
+alter table public.incomes  add column if not exists recurring_group_id uuid;
+alter table public.expenses add column if not exists recurring_group_id uuid;
+
+create unique index if not exists idx_incomes_recurring_month
+  on public.incomes (user_id, recurring_group_id, date_trunc('month', date::timestamptz))
+  where recurring_group_id is not null;
+
+create unique index if not exists idx_expenses_recurring_month
+  on public.expenses (user_id, recurring_group_id, date_trunc('month', date::timestamptz))
+  where recurring_group_id is not null;
+
+
+-- ================================================================
+-- 10. BUDGETS
 --    Monthly budget cap per category, per user.
 -- ================================================================
 create table if not exists public.budgets (
