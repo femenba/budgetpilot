@@ -14,11 +14,13 @@ import Plans          from './pages/Plans'
 import Insights       from './pages/Insights'
 import Reports        from './pages/Reports'
 import Budgets        from './pages/Budgets'
-import AdminDashboard from './pages/AdminDashboard'
-import CheckoutSuccess from './pages/CheckoutSuccess'
-import CheckoutCancel  from './pages/CheckoutCancel'
-import Privacy         from './pages/Privacy'
-import Terms           from './pages/Terms'
+import AdminDashboard  from './pages/AdminDashboard'
+import CheckoutSuccess  from './pages/CheckoutSuccess'
+import CheckoutCancel   from './pages/CheckoutCancel'
+import Privacy          from './pages/Privacy'
+import Terms            from './pages/Terms'
+import AccountSettings  from './pages/AccountSettings'
+import ContactSupport   from './pages/ContactSupport'
 
 export default function App() {
   return (
@@ -62,6 +64,14 @@ export default function App() {
           {/* Legal — public */}
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms"   element={<Terms />}   />
+
+          {/* Account & support */}
+          <Route path="/account" element={
+            <ProtectedRoute><AccountSettings /></ProtectedRoute>
+          } />
+          <Route path="/support" element={
+            <ProtectedRoute><ContactSupport /></ProtectedRoute>
+          } />
 
           {/* Admin-only */}
           <Route path="/admin" element={

@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, TrendingUp, TrendingDown,
   ArrowLeftRight, LogOut, CreditCard,
-  BarChart2, FileText, Target, MoreHorizontal, Zap, X, Shield,
+  BarChart2, FileText, Target, MoreHorizontal, Zap, X, Shield, User, HelpCircle,
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -191,6 +191,32 @@ function MobileMoreSheet({ open, onClose, isPro, isAdmin }) {
                 <p className="text-xs text-dim mt-0.5">Manage your subscription</p>
               </div>
             </NavLink>
+            <NavLink
+              to="/account"
+              onClick={onClose}
+              className="flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-canvas transition-colors"
+            >
+              <div className="w-10 h-10 rounded-xl bg-line flex items-center justify-center shrink-0">
+                <User size={18} className="text-dim" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-800">Account</p>
+                <p className="text-xs text-dim mt-0.5">Profile & settings</p>
+              </div>
+            </NavLink>
+            <NavLink
+              to="/support"
+              onClick={onClose}
+              className="flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-canvas transition-colors"
+            >
+              <div className="w-10 h-10 rounded-xl bg-line flex items-center justify-center shrink-0">
+                <HelpCircle size={18} className="text-dim" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-800">Support</p>
+                <p className="text-xs text-dim mt-0.5">Help & FAQs</p>
+              </div>
+            </NavLink>
             {isAdmin && (
               <NavLink
                 to="/admin"
@@ -264,6 +290,32 @@ function MobileMoreSheet({ open, onClose, isPro, isAdmin }) {
                 </NavLink>
               ))}
             </div>
+            <NavLink
+              to="/account"
+              onClick={onClose}
+              className="flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-canvas transition-colors"
+            >
+              <div className="w-10 h-10 rounded-xl bg-line flex items-center justify-center shrink-0">
+                <User size={18} className="text-dim" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-800">Account</p>
+                <p className="text-xs text-dim mt-0.5">Profile & settings</p>
+              </div>
+            </NavLink>
+            <NavLink
+              to="/support"
+              onClick={onClose}
+              className="flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-canvas transition-colors"
+            >
+              <div className="w-10 h-10 rounded-xl bg-line flex items-center justify-center shrink-0">
+                <HelpCircle size={18} className="text-dim" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-800">Support</p>
+                <p className="text-xs text-dim mt-0.5">Help & FAQs</p>
+              </div>
+            </NavLink>
             {isAdmin && (
               <NavLink
                 to="/admin"
@@ -390,7 +442,9 @@ export function Layout({ children }) {
 
           <div className="my-2 h-px bg-line" />
 
-          <NavItem to="/plans" icon={CreditCard} label="Plans" />
+          <NavItem to="/plans"   icon={CreditCard}  label="Plans"   />
+          <NavItem to="/account" icon={User}        label="Account" />
+          <NavItem to="/support" icon={HelpCircle}  label="Support" />
 
           <>
             <p className="px-3 pt-4 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Pro</p>
