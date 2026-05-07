@@ -1,13 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
-  <rect width="192" height="192" rx="40" fill="#0f172a"/>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#15803D"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="42" fill="url(#bg)"/>
   <text
     x="96"
-    y="130"
-    font-family="system-ui, -apple-system, sans-serif"
-    font-size="110"
-    font-weight="700"
+    y="134"
+    font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif"
+    font-size="114"
+    font-weight="800"
     fill="white"
     text-anchor="middle"
-    letter-spacing="-4"
+    letter-spacing="-5"
   >B</text>
 </svg>
