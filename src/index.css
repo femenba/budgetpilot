@@ -19,6 +19,10 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { @apply bg-canvas; }
+  ::-webkit-scrollbar-thumb { @apply bg-line rounded-full; }
+
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -30,24 +34,22 @@
 }
 
 @layer utilities {
-  /* Pill label */
   .pill {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold;
   }
 
   .pill-dark {
-    @apply pill bg-brand-100 text-brand-600;
+    @apply pill bg-brand-900/40 text-brand-300;
   }
 
   .pill-green {
-    @apply pill bg-green-100 text-green-700;
+    @apply pill bg-emerald-900/30 text-emerald-400;
   }
 
   .pill-red {
-    @apply pill bg-red-100 text-red-600;
+    @apply pill bg-red-900/30 text-red-400;
   }
 
-  /* Tactile button press */
   .btn-press {
     @apply transition-all duration-100 active:scale-[0.97] active:shadow-sm;
   }

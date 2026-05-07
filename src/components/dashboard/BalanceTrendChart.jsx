@@ -21,7 +21,7 @@ function CustomTooltip({ active, payload, label }) {
           <span className="flex items-center gap-1.5 text-dim">
             <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />Income
           </span>
-          <span className="font-semibold text-green-600">{fmtFull.format(income.value)}</span>
+          <span className="font-semibold text-accent-green">{fmtFull.format(income.value)}</span>
         </div>
       )}
       {expense && (
@@ -75,7 +75,7 @@ export function BalanceTrendChart() {
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-dim">
           <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />Income</span>
           <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-red-400" />Expenses</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 rounded-full bg-ink" />Balance</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 rounded-full bg-ink/70" />Balance</span>
         </div>
       </div>
 
@@ -97,28 +97,28 @@ export function BalanceTrendChart() {
                 <stop offset="100%" stopColor="#22c55e" stopOpacity={0}    />
               </linearGradient>
               <linearGradient id="expenseGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stopColor="#FF3B3B" stopOpacity={0.12} />
-                <stop offset="100%" stopColor="#FF3B3B" stopOpacity={0}    />
+                <stop offset="0%"   stopColor="#F87171" stopOpacity={0.15} />
+                <stop offset="100%" stopColor="#F87171" stopOpacity={0}    />
               </linearGradient>
             </defs>
 
-            <CartesianGrid strokeDasharray="3 3" stroke="#E2E2E2" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#1A2E44" vertical={false} />
 
             <XAxis
               dataKey="month"
-              tick={{ fontSize: 11, fill: '#6B6B6B' }}
+              tick={{ fontSize: 11, fill: '#64748B' }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 11, fill: '#6B6B6B' }}
+              tick={{ fontSize: 11, fill: '#64748B' }}
               axisLine={false}
               tickLine={false}
               tickFormatter={v => fmt.format(v)}
               width={48}
             />
 
-            <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#E2E2E2', strokeWidth: 1 }} />
+            <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#1A2E44', strokeWidth: 1 }} />
 
             <Area
               type="monotone"
@@ -132,19 +132,19 @@ export function BalanceTrendChart() {
             <Area
               type="monotone"
               dataKey="expense"
-              stroke="#FF3B3B"
+              stroke="#F87171"
               strokeWidth={2}
               fill="url(#expenseGrad)"
-              dot={{ r: 3, fill: '#FF3B3B', strokeWidth: 0 }}
-              activeDot={{ r: 5, fill: '#FF3B3B', strokeWidth: 0 }}
+              dot={{ r: 3, fill: '#F87171', strokeWidth: 0 }}
+              activeDot={{ r: 5, fill: '#F87171', strokeWidth: 0 }}
             />
             <Line
               type="monotone"
               dataKey="balance"
-              stroke="#111111"
+              stroke="#E2E8F0"
               strokeWidth={2}
-              dot={{ r: 3, fill: '#111111', strokeWidth: 0 }}
-              activeDot={{ r: 5, fill: '#111111', strokeWidth: 0 }}
+              dot={{ r: 3, fill: '#E2E8F0', strokeWidth: 0 }}
+              activeDot={{ r: 5, fill: '#E2E8F0', strokeWidth: 0 }}
               strokeDasharray="5 3"
             />
           </ComposedChart>

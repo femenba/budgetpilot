@@ -43,7 +43,7 @@ function CustomLabel({ x, y, width, height, value, viewBox }) {
       x={(viewBox?.x ?? x) + (viewBox?.width ?? width) + 8}
       y={(viewBox?.y ?? y) + (viewBox?.height ?? height) / 2 + 4}
       fontSize={11}
-      fill="#6B6B6B"
+      fill="#7B9CBE"
     >
       {fmtShort.format(value)}
     </text>
@@ -75,8 +75,8 @@ export function SpendingByCategoryChart({ transactions }) {
         {/* Type toggle */}
         <div className="flex rounded-xl overflow-hidden border border-line bg-canvas p-0.5 gap-0.5">
           {[
-            { val: 'expense', label: 'Expenses', activeClass: 'bg-ink text-white' },
-            { val: 'income',  label: 'Income',   activeClass: 'bg-green-600 text-white' },
+            { val: 'expense', label: 'Expenses', activeClass: 'bg-surface text-ink' },
+            { val: 'income',  label: 'Income',   activeClass: 'bg-accent-green/20 text-accent-green' },
           ].map(o => (
             <button
               key={o.val}
@@ -110,11 +110,11 @@ export function SpendingByCategoryChart({ transactions }) {
               type="category"
               dataKey="name"
               width={76}
-              tick={{ fontSize: 12, fill: '#6B6B6B' }}
+              tick={{ fontSize: 12, fill: '#7B9CBE' }}
               axisLine={false}
               tickLine={false}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: '#EDEDED' }} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
             <Bar dataKey="amount" radius={[0, 5, 5, 0]} maxBarSize={20}>
               {data.map((entry, i) => (
                 <Cell key={i} fill={entry.color} fillOpacity={0.85} />

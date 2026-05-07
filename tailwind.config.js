@@ -7,36 +7,41 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Monochrome brand — replaces purple entirely
+        // Primary brand — finance green (growth, money, trust)
         brand: {
-          50:  '#f5f5f5',
-          100: '#e8e8e8',
-          200: '#d4d4d4',
-          300: '#a3a3a3',
-          400: '#737373',
-          500: '#404040',
-          600: '#111111',
-          700: '#000000',
-          800: '#000000',
-          900: '#000000',
+          50:  '#F0FDF4',
+          100: '#DCFCE7',
+          200: '#BBF7D0',
+          300: '#86EFAC',
+          400: '#4ADE80',
+          500: '#22C55E',
+          600: '#16A34A',
+          700: '#15803D',
+          800: '#166534',
+          900: '#14532D',
         },
-        // Design token palette
-        surface: '#F7F7F7',   // card backgrounds
-        canvas:  '#EDEDED',   // page background
-        line:    '#E2E2E2',   // borders
-        ink:     '#111111',   // text primary
-        dim:     '#6B6B6B',   // text secondary
+        // Navy dark palette
+        surface: '#0F2743',
+        canvas:  '#0A1929',
+        line:    '#1B3F6E',
+        ink:     '#E8F4FF',
+        dim:     '#7B9CBE',
         accent: {
-          red:   '#FF3B3B',
-          green: '#22C55E',
+          red:    '#EF4444',
+          green:  '#22C55E',
+          blue:   '#38BDF8',
+          purple: '#A78BFA',  // soft — secondary only
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'card':    '0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.05)',
-        'card-md': '0 4px 12px 0 rgb(0 0 0 / 0.08), 0 2px 4px -1px rgb(0 0 0 / 0.04)',
+        'card':       '0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3)',
+        'card-md':    '0 4px 24px 0 rgb(0 0 0 / 0.5), 0 2px 8px -1px rgb(0 0 0 / 0.35)',
+        'glow-sm':    '0 0 16px rgba(34, 197, 94, 0.18)',
+        'glow-md':    '0 0 32px rgba(34, 197, 94, 0.25)',
+        'glow-blue':  '0 0 16px rgba(56, 189, 248, 0.18)',
       },
     },
   },

@@ -32,10 +32,10 @@ function CenterLabel({ cx, cy, total, type }) {
   const { fmtCompact } = useCurrency()
   return (
     <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
-      <tspan x={cx} dy="-6" fontSize="15" fontWeight="700" fill="#111111">
+      <tspan x={cx} dy="-6" fontSize="15" fontWeight="700" fill="#E8F4FF">
         {fmtCompact.format(total)}
       </tspan>
-      <tspan x={cx} dy="18" fontSize="10" fill="#6B6B6B">
+      <tspan x={cx} dy="18" fontSize="10" fill="#7B9CBE">
         total {type}
       </tspan>
     </text>
@@ -62,8 +62,8 @@ export function CategoryBreakdown({ transactions }) {
         <h3 className="text-sm font-semibold text-ink">By Category</h3>
         <div className="flex rounded-xl overflow-hidden border border-line bg-canvas p-0.5 gap-0.5">
           {[
-            { val: 'expense', label: 'Spent',  activeClass: 'bg-ink text-white' },
-            { val: 'income',  label: 'Earned', activeClass: 'bg-green-600 text-white' },
+            { val: 'expense', label: 'Spent',  activeClass: 'bg-surface text-ink' },
+            { val: 'income',  label: 'Earned', activeClass: 'bg-accent-green/20 text-accent-green' },
           ].map(o => (
             <button
               key={o.val}

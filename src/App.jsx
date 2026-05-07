@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider } from './contexts/AuthContext'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ProtectedRoute } from './components/layout/ProtectedRoute'
 import { ProRoute } from './components/layout/ProRoute'
 import { AdminRoute } from './components/layout/AdminRoute'
 import Login          from './pages/Login'
 import Register       from './pages/Register'
 import Dashboard      from './pages/Dashboard'
+import HomePage       from './pages/HomePage'
 import AuthCallback   from './pages/AuthCallback'
 import AddIncome      from './pages/AddIncome'
 import AddExpense     from './pages/AddExpense'
@@ -22,6 +23,12 @@ import Terms            from './pages/Terms'
 import AccountSettings  from './pages/AccountSettings'
 import ContactSupport   from './pages/ContactSupport'
 
+function SmartHome() {
+  const { user, loading } = useAuth()
+  if (loading) return null
+  return user ? <Dashboard /> : <HomePage />
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -35,10 +42,8 @@ export default function App() {
           {/* Legacy redirect */}
           <Route path="/auth" element={<Navigate to="/login" replace />} />
 
-          {/* Protected app */}
-          <Route path="/" element={
-            <ProtectedRoute><Dashboard /></ProtectedRoute>
-          } />
+          {/* Home — public landing or dashboard */}
+          <Route path="/" element={<SmartHome />} />
           <Route path="/income/add" element={
             <ProtectedRoute><AddIncome /></ProtectedRoute>
           } />

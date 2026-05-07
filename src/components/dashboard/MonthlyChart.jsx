@@ -30,14 +30,14 @@ function CustomTooltip({ active, payload, label }) {
       <p className="text-xs font-medium text-dim uppercase tracking-wide mb-2">{label}</p>
       <div className="flex justify-between gap-3 mb-1">
         <span className="flex items-center gap-1.5 text-dim"><span className="w-2 h-2 rounded-sm bg-emerald-400 inline-block" />Income</span>
-        <span className="font-semibold text-green-600">{fmt.format(get('income'))}</span>
+        <span className="font-semibold text-accent-green">{fmt.format(get('income'))}</span>
       </div>
       <div className="flex justify-between gap-3 mb-1">
         <span className="flex items-center gap-1.5 text-dim"><span className="w-2 h-2 rounded-sm bg-red-400 inline-block" />Expenses</span>
         <span className="font-semibold text-accent-red">{fmt.format(get('expense'))}</span>
       </div>
       <div className="flex justify-between gap-3 pt-2 mt-1 border-t border-line">
-        <span className="flex items-center gap-1.5 text-dim"><span className="w-5 h-0.5 bg-ink inline-block" />Net</span>
+        <span className="flex items-center gap-1.5 text-dim"><span className="w-5 h-0.5 bg-ink/70 inline-block" />Net</span>
         <span className={`font-bold ${get('balance') >= 0 ? 'text-ink' : 'text-accent-red'}`}>
           {fmt.format(get('balance'))}
         </span>
@@ -73,31 +73,31 @@ export function MonthlyChart({ transactions }) {
       ) : (
         <ResponsiveContainer width="100%" height={220}>
           <ComposedChart data={data} barGap={3} barCategoryGap="28%">
-            <CartesianGrid strokeDasharray="3 3" stroke="#E2E2E2" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#1B3F6E" vertical={false} />
             <XAxis
               dataKey="week"
-              tick={{ fontSize: 12, fill: '#6B6B6B' }}
+              tick={{ fontSize: 12, fill: '#7B9CBE' }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 11, fill: '#6B6B6B' }}
+              tick={{ fontSize: 11, fill: '#7B9CBE' }}
               axisLine={false}
               tickLine={false}
               tickFormatter={v => `${symbol}${v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}`}
               width={44}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: '#EDEDED' }} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
 
-            <Bar dataKey="income"  fill="#22c55e" fillOpacity={0.85} radius={[4, 4, 0, 0]} name="income" />
-            <Bar dataKey="expense" fill="#FF3B3B" fillOpacity={0.85} radius={[4, 4, 0, 0]} name="expense" />
+            <Bar dataKey="income"  fill="#22C55E" fillOpacity={0.9} radius={[4, 4, 0, 0]} name="income" />
+            <Bar dataKey="expense" fill="#EF4444" fillOpacity={0.9} radius={[4, 4, 0, 0]} name="expense" />
             <Line
               type="monotone"
               dataKey="balance"
-              stroke="#111111"
+              stroke="#E8F4FF"
               strokeWidth={2}
-              dot={{ r: 3.5, fill: '#111111', strokeWidth: 0 }}
-              activeDot={{ r: 5, fill: '#111111', strokeWidth: 0 }}
+              dot={{ r: 3.5, fill: '#E8F4FF', strokeWidth: 0 }}
+              activeDot={{ r: 5, fill: '#E8F4FF', strokeWidth: 0 }}
               strokeDasharray="5 3"
             />
           </ComposedChart>
